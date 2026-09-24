@@ -16,7 +16,7 @@ Every content change passes through automated gates before it reaches the publis
 | Front matter | `check-frontmatter.js` (Node) | Pull request | Missing or malformed metadata blocks the merge |
 | Internal links and build | Docusaurus | Pull request and deploy | Any broken internal link blocks the merge and the deploy |
 | Agent-file parity | `validate-agent-files.js` and Node tests | Pull request and deploy | Any missing or broken agent file blocks the merge and the deploy |
-| External links | Lychee | Push to `main` and weekly | Any dead URL fails the run. It doesn't block merges (see [why](#how-a-gate-works)) |
+| External links | Lychee | Push to `main` and weekly | Any dead URL fails the run. It doesn't block merges |
 
 ## What each tool demonstrates
 
