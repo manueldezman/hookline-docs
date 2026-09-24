@@ -94,7 +94,7 @@ A check only becomes a gate when the repository requires it. `main` is protected
 | Mistake in the pull request | Gate that caught it |
 | --- | --- |
 | Use 'Hookline' instead of 'hookline' | `prose` (Vale.Terms) |
-| "sevice" instead of service or device | `spelling` (codespell) |
+| incorrect spelling of service | `spelling` (codespell) |
 | missing "description" in docs/intro.md | `frontmatter` |
 |  Markdown link with to invalid URL `./sending-events-typo.md` in source file "docs/intro.md"| `build` |
 
