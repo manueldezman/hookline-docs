@@ -1,0 +1,20 @@
+# Lychee checks external links in the built HTML.
+scheme = ["https", "http"]
+max_retries = 3
+timeout = 20
+
+# Built HTML has root-relative links like /hookline-docs/docs/intro.
+# Resolve them against your site origin (same value as `url` in docusaurus.config.ts).
+base_url = "https://manueldezman.github.io"
+
+# Treat "rate limited" as success so busy sites don't cause false failures.
+accept = ["200..=299", "429"]
+
+exclude = [
+  '^https?://localhost',
+  '^https?://example\.(com|org)',
+  # Your own site: these URLs don't exist until the first deploy finishes.
+  # (?i) makes the match case-insensitive, because hosts get lowercased.
+  '(?i)^https://manueldezman\.github\.io/',
+  '^https://api\.hookline\.example',
+]

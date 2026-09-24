@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 250" width="880" height="250" role="img" aria-labelledby="t d">
+<title id="t">How Hookline delivers an event</title>
+<desc id="d">Your app sends an event to the Hookline API. Hookline signs and queues it, then delivers it to each subscribed endpoint and retries failures.</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#64748B"/></marker></defs>
+<rect x="1" y="1" width="878" height="248" rx="16" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
+<g font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'DejaVu Sans', Arial, sans-serif" text-anchor="middle">
+<rect x="36" y="70" width="190" height="110" rx="12" fill="#FFFFFF" stroke="#6366F1" stroke-width="2"/>
+<text x="131" y="118" font-size="20" font-weight="700" fill="#0F172A">Your app</text>
+<text x="131" y="146" font-size="14" fill="#475569">Sends one event</text>
+
+<rect x="345" y="55" width="190" height="140" rx="12" fill="#4F46E5"/>
+<text x="440" y="108" font-size="22" font-weight="700" fill="#FFFFFF">Hookline</text>
+<text x="440" y="138" font-size="14" fill="#E0E7FF">Sign · Queue · Retry</text>
+<text x="440" y="162" font-size="14" fill="#E0E7FF">30-day delivery log</text>
+
+<rect x="654" y="34" width="190" height="52" rx="10" fill="#FFFFFF" stroke="#6366F1" stroke-width="2"/>
+<text x="749" y="66" font-size="16" font-weight="600" fill="#0F172A">Endpoint A</text>
+<rect x="654" y="99" width="190" height="52" rx="10" fill="#FFFFFF" stroke="#6366F1" stroke-width="2"/>
+<text x="749" y="131" font-size="16" font-weight="600" fill="#0F172A">Endpoint B</text>
+<rect x="654" y="164" width="190" height="52" rx="10" fill="#FFFFFF" stroke="#6366F1" stroke-width="2"/>
+<text x="749" y="196" font-size="16" font-weight="600" fill="#0F172A">Endpoint C</text>
+
+<text x="285" y="104" font-size="13" fill="#475569" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'DejaVu Sans', Arial, sans-serif">POST /v1/events</text>
+<text x="594" y="104" font-size="13" fill="#475569" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'DejaVu Sans', Arial, sans-serif">signed webhook</text>
+</g>
+<g stroke="#64748B" stroke-width="2" fill="none" marker-end="url(#a)">
+<path d="M232 125H339"/>
+<path d="M541 110C580 90 610 60 648 60"/>
+<path d="M541 125H648"/>
+<path d="M541 140C580 160 610 190 648 190"/>
+</g>
+</svg>

@@ -1,0 +1,7 @@
+# A custom Vale rule. One file = one rule.
+extends: substitution
+message: "Use '%s' instead of '%s'."
+level: error
+ignorecase: true
+swap:
+  'web[ -]hooks?': webhook

@@ -1,0 +1,8 @@
+{
+  "name": "Hookline",
+  "title": "Hookline Docs",
+  "tagline": "Deliver every webhook, once, securely.",
+  "summary": "Hookline delivers webhooks with retries, signing, and a delivery log. These docs cover the API, the SDK, and signature verification.",
+  "githubUser": "manueldezman",
+  "repo": "hookline-docs"
+}

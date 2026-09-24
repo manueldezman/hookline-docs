@@ -1,0 +1,58 @@
+name: Docs checks
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  prose:
+    name: prose
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+      - name: Vale
+        uses: vale-cli/vale-action@v3
+        with:
+          files: docs
+          fail_on_error: true
+
+  spelling:
+    name: spelling
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: pip install codespell
+      - run: codespell docs README.md
+
+  frontmatter:
+    name: frontmatter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run check:frontmatter
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      # Fails on broken internal links. The postbuild hook then writes the .md files and llms files.
+      - run: npm run build
+      - run: npm run validate

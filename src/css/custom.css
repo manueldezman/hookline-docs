@@ -1,0 +1,23 @@
+/* Hookline brand colors. Infima needs the seven shades below. */
+:root {
+  --ifm-color-primary: #4f46e5;
+  --ifm-color-primary-dark: #4338ca;
+  --ifm-color-primary-darker: #3f3dbf;
+  --ifm-color-primary-darkest: #3532a0;
+  --ifm-color-primary-light: #6366f1;
+  --ifm-color-primary-lighter: #7377f3;
+  --ifm-color-primary-lightest: #9a9df7;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #818cf8;
+  --ifm-color-primary-dark: #6472f6;
+  --ifm-color-primary-darker: #5462f5;
+  --ifm-color-primary-darkest: #2b3cf0;
+  --ifm-color-primary-light: #9ea7fa;
+  --ifm-color-primary-lighter: #aeb6fb;
+  --ifm-color-primary-lightest: #dde0fe;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
