@@ -20,7 +20,7 @@ Hookline is a webhook delivery service. Your app sends one event to the Hookline
 1. Your app sends an event to `POST /v1/events`.
 2. Hookline queues the event and returns a `202` response.
 3. Hookline sends the event to each subscribed endpoint.
-4. The receiver acknowledges with a `2xx` status code within 10 seconds.
+4. The receiver acknowledges with a `2xx` status code within 5 seconds.
 
 :::note
 Test keys deliver events to the CLI listener only. Use a live key to reach real endpoints.
