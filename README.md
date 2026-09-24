@@ -1,4 +1,4 @@
-# Hookline docs: a documentation pipeline case study
+# Hookline docs: a documentation pipeline
 
 **Live site:** [manueldezman.github.io/hookline-docs](https://manueldezman.github.io/hookline-docs/)
 · **For agents:** [llms.txt](https://manueldezman.github.io/hookline-docs/llms.txt)
@@ -89,7 +89,7 @@ A check only becomes a gate when the repository requires it. `main` is protected
 
 [Pull request #2](https://github.com/manueldezman/hookline-docs/pull/2) is a deliberately broken change. It exists to show the gates blocking a merge.
 
-![Pull request #2 showing failed status checks that block the merge. [EDIT: describe the red checks you can see, for example "prose, spelling and frontmatter failed; build passed".]](./.github/assets/pr-2-failed-checks.png)
+![Pull request showing build, prose, spelling and frontmatter checks failure](./assets/r-2-failed-checks.png)
 
 | Mistake in the pull request | Gate that caught it |
 | --- | --- |
