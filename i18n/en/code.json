@@ -1,0 +1,6 @@
+{
+  "theme.SearchPage.noResultsText": {
+    "message": "No matches for that term. Try a shorter query, a different word, or start from Getting started.",
+    "description": "The paragraph shown on the search page when a query returns nothing"
+  }
+}
