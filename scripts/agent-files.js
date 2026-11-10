@@ -21,8 +21,14 @@ const DOCS_DIR = path.join(ROOT, 'docs');
 const ROUTE_BASE = '/docs'; // must match `routeBasePath` in docusaurus.config.ts
 
 // Full public URL of the site including baseUrl, no trailing slash.
+const SITE_ORIGIN =
+  process.env.SITE_ORIGIN ||
+  process.env.DEPLOY_PRIME_URL ||
+  process.env.URL ||
+  `https://${site.githubUser}.github.io`;
+const SITE_BASE_URL = process.env.SITE_BASE_URL || `/${site.repo}/`;
 const SITE_URL = (
-  process.env.SITE_URL || `https://${site.githubUser}.github.io/${site.repo}`
+  process.env.SITE_URL || `${SITE_ORIGIN}${SITE_BASE_URL}`
 ).replace(/\/$/, '');
 
 // Docusaurus strips number prefixes from file and folder names: "01-intro.md" -> "intro".
@@ -59,8 +65,13 @@ function absolutize(href, file) {
   const abs = path.resolve(path.dirname(file), pathPart);
   const inDocs = abs.startsWith(DOCS_DIR + path.sep);
   if (inDocs && /\.mdx?$/.test(abs)) {
-    const rel = path.relative(DOCS_DIR, abs).replace(/\.mdx?$/, '');
-    const route = joinRoute(rel.split(path.sep).map(stripPrefix).join('/'));
+    let data = {};
+    try {
+      data = matter(fs.readFileSync(abs, 'utf-8')).data;
+    } catch {
+      // Keep going so a broken link surfaces in the validator, not here.
+    }
+    const route = routeFor(abs, data);
     return `${SITE_URL}${route}.md${rest}`;
   }
   return href; // co-located assets get hashed by Docusaurus; keep those under static/ instead
@@ -94,6 +105,16 @@ function serializeMdx(source, file = path.join(DOCS_DIR, 'page.md')) {
     .replace(/^import\s.+from\s+['"].+['"];?[ \t]*$/gm, '')
     .replace(/^export\s.+$/gm, '')
     .replace(/<TabItem\b([^>]*)>/g, (_, attrs) => `\n### ${tabLabel(attrs)}\n`)
+    .replace(/<SectionCard\b([^>]*)>/g, (_, attrs) => {
+      const title = (attrs.match(/title="([^"]*)"/) || [])[1] || '';
+      const description = (attrs.match(/description="([^"]*)"/) || [])[1] || '';
+      return `\n### ${title}\n\n${description}\n`;
+    })
+    .replace(/<Endpoint\b([^>]*)\/>/g, (_, attrs) => {
+      const method = (attrs.match(/method="([^"]*)"/) || [])[1] || '';
+      const endpointPath = (attrs.match(/path="([^"]*)"/) || [])[1] || '';
+      return `\`${method} ${endpointPath}\``;
+    })
     .replace(/<\/?(?:Tabs|TabItem)\b[^>]*>/g, '')
     .replace(/^:::(\w+)[ \t]*\[?([^\]\n]*)\]?[ \t]*$/gm, (_, type, title) =>
       `**${title.trim() || type[0].toUpperCase() + type.slice(1)}:**`)
