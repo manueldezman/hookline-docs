@@ -9,6 +9,32 @@
   --ifm-color-primary-lightest: #9a9df7;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  /* The navbar takes a light wash rather than the page white, so the
+     page-background search input catches the eye against it. The token
+     the search input paints with flips between solid white here and
+     the solid page color in dark mode. */
+  --ifm-navbar-background-color: #f2f4f8;
+  --search-input-canvas: #ffffff;
+  /* The resting border on the search input is solid black in light
+     mode for maximum legibility rather than a light grey that can
+     wash out on the tinted navbar. Placeholder text, the magnifier
+     glyph, and the typed text all take solid black through the glyph
+     token below, and dark mode swaps every one of these tokens.
+     Radius follows the reference bar the user approved, 8px corners. */
+  --search-input-border: #000000;
+  --search-input-glyph: #000000;
+  --search-input-radius: 8px;
+  --ifm-navbar-search-input-placeholder-color: #000000;
+}
+
+.gridGuideLayout {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+/* Support is a mailto, so it needs no external-link glyph. */
+.navAction[href^='mailto:'] svg,
+.footer a[href^='mailto:'] svg {
+  display: none;
 }
 
 [data-theme='dark'] {
@@ -20,4 +46,396 @@
   --ifm-color-primary-lighter: #aeb6fb;
   --ifm-color-primary-lightest: #dde0fe;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  /* Dark navbar lifts slightly above the page surface, mirroring the
+     light mode elevation so the search input still separates. */
+  --ifm-navbar-background-color: #22252d;
+  --search-input-canvas: var(--ifm-background-color);
+  /* Resolves on the html element, where the dark navbar rule has not
+     applied, so write the mode's emphasis value directly instead of
+     referencing a navbar-scoped token. Dark follows the same solid
+     rule as light, so placeholders, glyph, chips, and border are all
+     solid white on the dark field. */
+  /* The reference bar keeps the dark field itself dark but pulls the
+     border down to a soft neutral grey so it reads as a subtle frame,
+     not a bright outline. The placeholder and glyph stay solid white. */
+  --search-input-border: rgba(255, 255, 255, 0.18);
+  --search-input-glyph: #ffffff;
+  --ifm-navbar-search-input-placeholder-color: #ffffff;
+}
+
+/* Endpoint line on API method pages. The course asks for the endpoint to get
+   more visual weight than body text, and for path placeholders to be
+   identifiable at a glance. */
+.endpoint-line {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.75rem 0 1.5rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  background: var(--ifm-color-emphasis-100);
+}
+
+.endpoint-method {
+  flex: none;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: var(--ifm-color-emphasis-700);
+  color: var(--ifm-background-color);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
+.endpoint-get .endpoint-method {
+  background: #0f766e;
+  color: #ffffff;
+}
+
+.endpoint-post .endpoint-method {
+  background: #4f46e5;
+  color: #ffffff;
+}
+
+.endpoint-put .endpoint-method {
+  background: #b45309;
+  color: #ffffff;
+}
+
+.endpoint-patch .endpoint-method {
+  background: #a16207;
+  color: #ffffff;
+}
+
+.endpoint-delete .endpoint-method {
+  background: #b91c1c;
+  color: #ffffff;
+}
+
+.endpoint-path {
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 1rem;
+}
+
+.endpoint-param {
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+}
+
+/* Method badge in the sidebar. Mirrors the endpoint line on method pages. */
+.sidebar-link-label {
+  overflow: hidden;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.sidebar-link-external {
+  align-items: center;
+}
+
+.sidebar-method {
+  display: inline-block;
+  margin-right: 0.4rem;
+  padding: 0 0.32rem;
+  border-radius: 3px;
+  background: var(--ifm-color-emphasis-600);
+  color: #ffffff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  line-height: 1.5;
+  vertical-align: 0.05em;
+}
+
+.sidebar-method-get {
+  background: #0f766e;
+}
+
+.sidebar-method-post {
+  background: #4f46e5;
+}
+
+.sidebar-method-put {
+  background: #b45309;
+}
+
+.sidebar-method-patch {
+  background: #a16207;
+}
+
+.sidebar-method-delete {
+  background: #b91c1c;
+}
+
+/* The two-row header's row divider only exists on desktop. */
+.navBreakRow {
+  display: none;
+}
+
+/* Center the search bar. The v4 layout nests the search container inside
+   the right items group, so reposition it against the navbar itself. The
+   vertical anchor targets the first header row, since the desktop header
+   carries its section links on a second row below the rule. */
+@media (min-width: 997px) {
+  .navbar__inner > .navbar__items--right > [class*='navbarSearchContainer'] {
+    position: absolute;
+    left: 50%;
+    right: auto;
+    top: 0.5rem;
+    transform: translateX(-50%);
+    z-index: 2000;
+  }
+
+  /* The container's layout padding is already symmetric, so drop the
+     offset the plugin adds to keep the box centered on idle and focus. */
+  .navbar__inner > .navbar__items--right > [class*='navbarSearchContainer'] > [class*='searchBarContainer'] {
+    margin: 0;
+  }
+
+  /* One expanded width for every desktop state. The input paints with
+     the search canvas token, solid white in light mode so it stands
+     clear of the tinted navbar, matches the page color in dark mode,
+     and carries a solid border so the field reads as a real box. Light
+     mode borders are solid black for legibility, dark keeps the mode's
+     own emphasis value. */
+  .navbar__inner
+    > .navbar__items--right
+    > [class*='navbarSearchContainer']
+    > [class*='searchBarContainer']
+    .navbar__search-input {
+    width: 18rem;
+    height: 2.75rem;
+    background-color: var(--search-input-canvas);
+    border: 1px solid var(--search-input-border);
+    border-radius: var(--search-input-radius);
+    color: var(--search-input-glyph);
+    box-shadow: var(--ifm-global-shadow-lw);
+  }
+
+  /* The two-row header keeps the section links off the first row, so the
+     field has room to stay expanded at every desktop width. */
+}
+
+/* Two-row desktop header. The logo, the brand link, and the search bar
+   keep the first row, while the section links move to a second row under
+   a full-width rule. Both navbar groups dissolve with display contents so
+   their children can be ordered onto the two rows directly. The group
+   wrappers stay in the DOM, so the responsive mobile menu is untouched. */
+@media (min-width: 997px) {
+  :root {
+    /* Row one is the 44px search box plus the navbar padding, the divider
+       adds its margin and hairline, row two is the link line plus padding.
+       Measured height is 111px, so the sticky offsets on the docs sidebar
+       and the table of contents line up with the real header. */
+    --ifm-navbar-height: 111px;
+  }
+
+  .navbar {
+    height: auto;
+  }
+
+  .navbar__inner {
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    column-gap: 0.75rem;
+  }
+
+  /* The brand link carries Infima's own right margin, and the Docs item
+     keeps its nav-item padding on the leading edge. Both were tuned for a
+     single row of links, where that breathing room is wanted, so drop them
+     and let the column gap own the seam between logo and tagline. */
+  .navbar__brand {
+    margin-right: 0;
+  }
+
+  .navbar__item:has(> .docsHeader) {
+    padding-inline-start: 0;
+  }
+
+  .navbar__inner > .theme-layout-navbar-left,
+  .navbar__inner > .theme-layout-navbar-right {
+    display: contents;
+  }
+
+  .navbar__brand {
+    order: 0;
+    display: flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+
+  .navbar__item {
+    order: 0;
+  }
+
+  /* The section links and the header actions share the first row. The
+     actions sit right of the search field and the section links drop to
+     row two, so the actions take the right edge and the first one claims
+     the free space. */
+  .navbar__inner .navbar__link.navAction {
+    order: 1;
+  }
+
+  .navbar__inner .navbar__link.navActionFirst {
+    margin-left: auto;
+  }
+
+  .navbar__inner .navbar__link.navAction {
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--ifm-color-emphasis-300);
+    border-radius: 8px;
+    color: var(--ifm-font-color-base);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .navbar__inner .navbar__link.navAction:hover {
+    border-color: var(--ifm-color-primary);
+    color: var(--ifm-color-primary);
+  }
+
+  .navbar__inner [class*='colorModeToggle'] {
+    order: 2;
+  }
+
+  /* Full-width rule closing the first row and opening the second. */
+  .navBreakRow {
+    display: block;
+    order: 3;
+    flex: 0 0 100%;
+    height: 1px;
+    padding: 0;
+    margin: 0.5rem 0 0;
+    background: var(--ifm-color-emphasis-200);
+  }
+
+  /* Section links, second row. */
+  .navbar__inner .navbar__link {
+    order: 4;
+  }
+
+  .navbar__inner .navbar__link:not(.navAction) {
+    padding-block: 0.55rem 0.4rem;
+  }
+}
+
+/* Search empty state. The dropdown template is an HTML string injected by
+   the search plugin, so these selectors are global rather than scoped. */
+.searchEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.9rem 1.25rem 1.1rem;
+  text-align: center;
+}
+
+.searchEmptyIcon {
+  color: var(--ifm-color-emphasis-500);
+  line-height: 0;
+}
+
+.searchEmptyTitle {
+  color: var(--ifm-heading-color);
+  font-weight: 600;
+}
+
+.searchEmptyHint {
+  max-width: 26rem;
+  margin-top: 0.35rem;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.searchEmptyHint a {
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+}
+
+/* GitHub lives in the footer as an icon, since it is not a docs section. */
+.footer__copyright {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.footerGitHub {
+  display: inline-flex;
+  color: var(--ifm-footer-link-color);
+}
+
+.footerGitHub:hover {
+  color: var(--ifm-footer-link-hover-color);
+}
+
+/* Docs header, LocalStack style. The logo comes from navbar.logo, and
+   the html item renders one single link containing the brand name, the
+   divider, and Docs in the brand indigo. Infima colors every anchor
+   with the link token, so the brand needs its own solid color token. */
+:root {
+  --docs-header-brand: #000000;
+}
+
+[data-theme='dark'] {
+  --docs-header-brand: #ffffff;
+}
+
+.docsHeader {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--docs-header-brand);
+  text-decoration: none;
+}
+
+.docsHeader:hover {
+  color: var(--docs-header-brand);
+  text-decoration: none;
+}
+
+.docsHeaderDivider {
+  display: inline-block;
+  width: 1px;
+  height: 1.35rem;
+  margin-inline: 0.5rem 0.75rem;
+  background: var(--ifm-color-emphasis-400);
+}
+
+.docsHeaderDocs {
+  color: var(--ifm-color-primary);
+}
+
+/* Square corners everywhere except the field itself, which follows the
+   reference bar with an 8px radius. Same layer rule as before, custom
+   css lands before the plugin css, so ties go to the plugin and each
+   selector must out-muscle its rule on specificity. */
+[class*='dropdownMenu'][class*='dropdownMenu'][class*='dropdownMenu'],
+[class*='dropdownMenu'][class*='dropdownMenu'][class*='dropdownMenu'] [class*='suggestion'][class*='suggestion'][class*='suggestion'],
+[class*='searchQueryInput'][class*='searchQueryInput'],
+[class*='searchContextInput'][class*='searchContextInput'],
+[class*='searchBar'] kbd {
+  border-radius: 0;
+}
+
+/* The Ctrl K chips draw their border and text color from the plugin,
+   so give them the input's border and glyph tokens, with a small
+   radius of their own to sit inside the rounded field. */
+[class*='searchHint'][class*='searchHint'] {
+  border-color: var(--search-input-border);
+}
+
+.kbd, [class*='searchBar'] kbd[class*='searchHint'] {
+  color: var(--search-input-glyph);
 }
