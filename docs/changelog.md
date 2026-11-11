@@ -31,13 +31,13 @@ Newest first. Each entry says what changed and whether you need to do anything.
 
 ## 2026-02-10
 
-- **API v2.** Every resource moved from `/v1` to `/v2`, with `/v2/endpoints` replacing `/v1/hooks`. Dated versions are unchanged, and `Hookline-Version` still selects one.
-- **v1 sunset.** The v1 API stops accepting requests on 1 April 2027. See [Migrate from v1](./guides/migrate-from-v1.md).
+- **API v2.** Every resource moved from `/v1` to `/v2`, with `/v2/endpoints` replacing `/v1/hooks`. Dated versions stay the same, and `Hookline-Version` still selects one.
+- **v1 sunset.** The v1 API stops accepting requests on April 1, 2027. See [Migrate from v1](./guides/migrate-from-v1.md).
 - **Action required.** Update base URLs and the endpoint path before the sunset.
 
 ## 2025-11-20
 
-- **Delivery log.** Every attempt is recorded for thirty days and can be queried by endpoint, type, and status. See [Delivery log](./api/deliveries/index.md).
+- **Delivery log.** Hookline records every attempt for thirty days, and you can query it by endpoint, type, and status. See [Delivery log](./api/deliveries/index.md).
 
 ## 2025-06-02
 
