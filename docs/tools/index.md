@@ -9,13 +9,13 @@ import SectionCards, {SectionCard} from '@site/src/components/SectionCards';
 
 # SDKs
 
-Use an SDK when you want typed requests, retries, and signature helpers inside your own code, and use raw HTTP when you want no dependency. For the exact request and response contract use the [API reference](/docs/api/), and for delivery, signing, and retry behavior start with [Delivery and retries](/docs/api/about/delivery-and-retries).
+Use an SDK when you want typed requests, retries, and signature helpers in your own code. Use raw HTTP when you want no dependency. For the exact request and response contract, use the [API reference](/docs/api/). For delivery, signing, and retry behavior, start with [Delivery and retries](/docs/api/about/delivery-and-retries), and keep an eye on the schedule.
 
-## SDK or raw HTTP
+## Choose an SDK or raw HTTP
 
 | Choose | When |
 | --- | --- |
-| SDK | You are writing an application and want retries, pagination, and signature verification handled for you |
+| SDK | You are writing an app and want retries, pagination, and signature verification handled for you |
 | Raw HTTP | You are scripting, working in a language without an SDK, or debugging a single request |
 
 ## Start here

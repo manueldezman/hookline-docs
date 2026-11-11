@@ -13,12 +13,12 @@ Hookline delivers webhooks with retries, signing, and a delivery log. You can se
 
 ## Core use cases
 
-- **Ship webhooks without building the pipeline.** Emit events from your application and let Hookline queue, sign, deliver, and track them, so webhooks never sit in your request path.
-- **Reach every subscribed endpoint at once.** Publish one event and Hookline fans it out to every endpoint that subscribes to that type, each with its own secret and filters.
+- **Ship webhooks without building the pipeline.** Emit events from your app and let Hookline queue, sign, deliver, and track them so webhooks do not sit in your request path.
+- **Reach every subscribed endpoint at once.** Publish one event, and Hookline fans it out to every endpoint that subscribes to that type, each with its own secret, filters, and delivery rules.
 - **Trust what arrives at your receiver.** Check the signature before acting on a payload, so only requests Hookline signed can change state in your system.
 - **Recover from failures without losing data.** See the exact status code or error for every attempt, retry on a fixed schedule, and replay the failed window once you fix the cause.
 
-## Start with the Basics
+## Start with the basics
 
 <SectionCards>
 

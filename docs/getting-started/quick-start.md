@@ -59,7 +59,7 @@ Test keys deliver to the CLI listener only, so the event stays on your machine. 
 </TabItem>
 <TabItem value="cli" label="Hookline CLI">
 
-The CLI is installed in [Install the CLI](./installation.md). If you skipped that page, do it first.
+The CLI lives in [Install the CLI](./installation.md). If you skipped that page, complete it first.
 
 ## 1. Start the listener
 
@@ -103,9 +103,9 @@ invoice.paid  evt_8f2a91  queued
 
 ## Troubleshooting
 
-### The request was rejected
+### Hookline rejects the request
 
-A `4xx` response means the event never existed and nothing was queued.
+A `4xx` response means Hookline never created the event and queued nothing.
 
 | Response | What it means | Fix |
 | --- | --- | --- |
@@ -113,9 +113,9 @@ A `4xx` response means the event never existed and nothing was queued.
 | `422` | The payload failed validation | Read `error.message` for the field |
 | `429` | The request never ran | Wait for `Retry-After`, then retry once |
 
-### The event was accepted but nothing arrived
+### Hookline accepts the event, but nothing arrives
 
-A `202` means Hookline queued the event. Nothing arriving is a subscription problem, not a sending problem.
+A `202` means Hookline queued the event. If nothing arrives, the problem is the subscription, not the send.
 
 - Confirm an endpoint subscribes to the event type, since no match means no delivery
 - Check whether the endpoint uses a wildcard and what it expands to

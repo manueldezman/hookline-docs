@@ -7,7 +7,7 @@ displayed_sidebar: toolsSidebar
 
 # Node.js SDK
 
-The SDK wraps the HTTP API, retries on `429` and `5xx`, and includes a signature helper. Node.js 20 or later is required.
+The SDK wraps the HTTP API, retries on `429` and `5xx`, and includes a signature helper. You need Node.js 20 or later.
 
 ## Install
 

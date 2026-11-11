@@ -37,7 +37,7 @@ brew install hookline/tap/hookline
 npm install -g @hookline/cli
 ```
 
-Node.js 20 or later is required for this option.
+You need Node.js 20 or later for this option.
 
 </TabItem>
 <TabItem value="windows" label="Windows">
@@ -69,13 +69,13 @@ Sign in through the browser.
 hookline login
 ```
 
-The browser opens, you approve the CLI, and the terminal reports the account it stored.
+The browser opens. You approve the CLI, and the terminal reports the account it stored.
 
 ```text title="Output"
 Signed in to acme-labs as owner
 ```
 
-Confirm which key the CLI will use.
+Confirm which key the CLI uses.
 
 ```bash
 hookline whoami

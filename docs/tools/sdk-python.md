@@ -7,7 +7,7 @@ displayed_sidebar: toolsSidebar
 
 # Python SDK
 
-The SDK wraps the HTTP API, retries on `429` and `5xx`, and includes a signature helper. Python 3.10 or later is required.
+The SDK wraps the HTTP API, retries on `429` and `5xx`, and includes a signature helper. You need Python 3.10 or later.
 
 ## Install
 
