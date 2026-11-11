@@ -76,6 +76,12 @@ Three workflows wire the tools together.
 | [`links.yml`](.github/workflows/links.yml) | Push to `main`, weekly cron, manual | Builds the site, then runs Lychee |
 | [`deploy.yml`](.github/workflows/deploy.yml) | Push to `main`, manual | Builds, validates the agent files, then publishes to GitHub Pages |
 
+### Deploy previews
+
+Netlify builds pull requests only. Every PR gets its own preview URL, and production stays on GitHub Pages. [`netlify.toml`](netlify.toml) skips every context except `deploy-preview`, sets the build command and publish directory, and sets `SITE_BASE_URL=/` because Netlify serves from the domain root while GitHub Pages serves from `/hookline-docs/`.
+
+`docusaurus.config.ts` and `scripts/agent-files.js` read `SITE_ORIGIN` and `SITE_BASE_URL`, so one codebase builds correctly for both hosts. When they are unset, the GitHub Pages values apply.
+
 ### How a gate works
 
 A check only becomes a gate when the repository requires it. `main` is protected: a pull request can't merge until `prose`, `spelling`, `frontmatter`, and `build` have all passed. The four jobs are independent and run in parallel, so one failure doesn't hide the others. A contributor sees every problem in one round instead of fixing them one at a time.
@@ -181,6 +187,7 @@ tools/make-brand-assets.py     Regenerates the images from code
 lychee.toml                    Lychee configuration
 site.json                      Values shared by the config and the scripts
 docusaurus.config.ts           Site configuration
+netlify.toml                   Deploy preview settings, plus the root base URL
 ```
 
 ### Run it locally

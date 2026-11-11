@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4F46E5"/>
+      <stop offset="1" stop-color="#1E1B4B"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="78%" cy="76%" r="80%">
+      <stop offset="0" stop-color="#A5B4FC" stop-opacity=".48"/>
+      <stop offset="1" stop-color="#A5B4FC" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#1E1B4B" flood-opacity=".32"/>
+    </filter>
+  </defs>
+
+  <rect width="640" height="360" fill="url(#bg)"/>
+  <rect width="640" height="360" fill="url(#glow)"/>
+  <circle cx="84" cy="56" r="104" fill="#A5B4FC" opacity=".24"/>
+  <circle cx="558" cy="308" r="128" fill="#818CF8" opacity=".2"/>
+
+  <g filter="url(#shadow)">
+    <rect x="58" y="70" width="524" height="218" rx="16" fill="#0F172A" stroke="#334155" stroke-width="2"/>
+    <path d="M58 106h524" stroke="#1E293B" stroke-width="2"/>
+    <circle cx="82" cy="88" r="5" fill="#F87171"/>
+    <circle cx="99" cy="88" r="5" fill="#FBBF24"/>
+    <circle cx="116" cy="88" r="5" fill="#34D399"/>
+    <text x="470" y="92" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="700" letter-spacing="1.4" fill="#64748B">RESPONSE</text>
+
+    <rect x="82" y="126" width="96" height="30" rx="15" fill="#78350F"/>
+    <text x="130" y="147" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" font-weight="700" fill="#FDE68A">429</text>
+    <text x="194" y="147" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12.5" fill="#94A3B8">Too Many Requests</text>
+
+    <text x="82" y="188" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12.5" fill="#64748B">retry-after</text>
+    <text x="190" y="188" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12.5" fill="#FDE68A">30</text>
+
+    <text x="82" y="216" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12.5" fill="#64748B">x-ratelimit-remaining</text>
+    <text x="272" y="216" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12.5" fill="#FCA5A5">0</text>
+
+    <text x="82" y="244" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12.5" fill="#64748B">x-ratelimit-reset</text>
+    <text x="248" y="244" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12.5" fill="#94A3B8">1772616780</text>
+  </g>
+
+  <g>
+    <circle cx="380" cy="204" r="34" fill="none" stroke="#475569" stroke-width="5"/>
+    <path d="M380 182v22l16 10" fill="none" stroke="#FBBF24" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="380" y="262" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#94A3B8">wait</text>
+  </g>
+</svg>

@@ -1,0 +1,8 @@
+{
+  "label": "Endpoints",
+  "position": 2,
+  "link": {
+    "type": "doc",
+    "id": "api/endpoints/index"
+  }
+}
