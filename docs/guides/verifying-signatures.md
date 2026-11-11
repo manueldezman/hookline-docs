@@ -12,7 +12,7 @@ import TabItem from '@theme/TabItem';
 
 This guide adds signature verification to a receiver that already accepts Hookline deliveries. You need the endpoint secret from the dashboard, which starts with `whsec_`.
 
-The check hashes the timestamp, a period, and the raw request body with that secret, then compares the result with the `v1` value in the header. [Delivery and retries](../api/about/delivery-and-retries.md#signing) explains why the timestamp is covered and why the comparison must be constant time.
+The check hashes the timestamp, a period, and the raw request body with that secret, then compares the result with the `v1` value in the header. [Delivery and retries](../api/about/delivery-and-retries.md#signing) explains why the check covers the timestamp and why the comparison must be constant time.
 
 ## Steps
 
@@ -79,7 +79,7 @@ def verify_signature(raw_body: bytes, header: str, secret: str) -> bool:
 5. Parse the JSON and handle the event only after the check passes.
 
 :::warning
-If your framework parses the body before you verify, the re-serialized copy can differ from what was signed, and every check fails. Register the verify middleware before the JSON parser.
+If your framework parses the body before you verify, the re-serialized copy can differ from what Hookline signed, and every check fails. Register the verify middleware before the JSON parser.
 :::
 
 ## Verify it worked
@@ -90,7 +90,7 @@ If your framework parses the body before you verify, the re-serialized copy can 
 
 ## Troubleshooting
 
-Work from the symptom. A signature error means the request arrived and your receiver rejected it, so the delivery log usually shows a `2xx` even though nothing was handled.
+Work from the symptom. A signature error means the request arrived and your receiver rejected it, so the delivery log usually shows a `2xx` even though no handler ran.
 
 ### Every request fails
 
@@ -98,7 +98,7 @@ The hash and the header disagree on every attempt, which points at the inputs ra
 
 - The secret is the endpoint secret that starts with `whsec_`, not your API key
 - A test endpoint secret used against a live endpoint fails the same way
-- The body was parsed before verification, so the hash covers a re-serialized copy
+- Something parsed the body before verification, so the hash covers a re-serialized copy
 
 ### Some requests fail
 
@@ -109,7 +109,7 @@ A receiver whose clock drifts past the five minute window rejects valid requests
 
 ### Fails only after a rotation
 
-During a rotation window Hookline signs with both secrets and sends two `v1` values. A receiver that reads only the first one fails as soon as the new secret is used.
+During a rotation window Hookline signs with both secrets and sends two `v1` values. A receiver that reads only the first one fails as soon as Hookline signs with the new secret.
 
 - Check every `v1` value, not just the first
 - Keep the old secret until the window closes, then remove it

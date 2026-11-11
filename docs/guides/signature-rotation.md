@@ -46,11 +46,11 @@ During the window Hookline signs every delivery with both secrets. [Delivery and
 
 - A new delivery carries a single `v1` value in `Hookline-Signature`.
 - The receiver accepts it with only the new secret configured.
-- The delivery log shows no signature failures after the old secret is removed.
+- The delivery log shows no signature failures after you remove the old secret.
 
 ## If a secret leaked
 
-Rotate immediately and skip the overlap. Accepting only the new secret for a few minutes beats accepting a leaked one for a day. Deliveries that fail during the switch appear in the log and can be replayed.
+Rotate immediately and skip the overlap. Accepting only the new secret for a few minutes beats accepting a leaked one for a day. Deliveries that fail during the switch appear in the log, and you can replay them.
 
 ## Rollback
 

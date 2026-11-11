@@ -27,13 +27,13 @@ Start from the delivery log, which records the status your endpoint returned or 
    - `connection_refused` means nothing is listening on the port. Start the service and confirm the port.
    - `401` or `403` means your app rejected the request. Check its auth rules ahead of the handler.
    - `404` means the path does not match a route. Compare the endpoint URL with your routes.
-   - `500` means the handler raised. Read your application logs.
+   - `500` means the handler raised. Read your app logs.
 
 4. If every attempt reports a connection error, something blocks the request before it reaches the handler. Check the firewall and the [delivery IP addresses](../api/about/ip-addresses.md).
 
 5. If the log shows `2xx` but your app rejects the request, the signature check is the usual cause. See [Troubleshooting](./verifying-signatures.md#troubleshooting).
 
-6. If seven days of constant failure disabled the endpoint, re-enable it in the dashboard before replaying.
+6. If seven days of constant failure turned off the endpoint, re-enable it in the dashboard before you replay the delivery.
 
 7. Replay the failed deliveries from the log. [Replay a delivery](../api/deliveries/replay.md) covers one record and [Replay a range](../api/deliveries/replay-range.md) covers a window for one endpoint.
 
@@ -41,7 +41,7 @@ Start from the delivery log, which records the status your endpoint returned or 
 
 ### Requests return 429
 
-The request did not run, so nothing was created and nothing was queued. Retrying is safe once the window resets.
+The request did not run, so Hookline created nothing and queued nothing. Retrying is safe after the window resets.
 
 - Wait for the seconds in `Retry-After`, then retry once
 - Queue the work instead of looping if the retry also returns `429`
@@ -50,19 +50,19 @@ The request did not run, so nothing was created and nothing was queued. Retrying
 
 Replays count as API requests. A wide replay window is the usual reason a quiet integration starts returning `429`. [Rate limits](../api/about/rate-limits.md) has the per-plan quotas.
 
-### The endpoint was disabled
+### The endpoint turned off
 
-Seven days of constant failure disables an endpoint. The dashboard shows the date and the last error it recorded.
+Seven days of constant failure turns off an endpoint. The dashboard shows the date and the last error it recorded.
 
-- Fix the cause first, since re-enabling without a fix disables it again
-- Re-enable the endpoint in the dashboard
-- Replay the window after it is enabled, because a replay does not re-enable anything
+- Fix the cause first, since turning it back on without a fix turns it off again
+- Turn the endpoint back on in the dashboard
+- Replay the window after you turn it back on, because a replay does not turn it back on
 
 ### Every attempt fails with a connection error
 
 Something blocks the request before it reaches the handler. Check the firewall rules against the [delivery IP addresses](../api/about/ip-addresses.md), then confirm the hostname still resolves.
 
-### The log shows 2xx but nothing was handled
+### The log shows 2xx, but the app did not handle it
 
 The signature check rejected the request after Hookline recorded a success. [Troubleshooting](./verifying-signatures.md#troubleshooting) covers the causes.
 

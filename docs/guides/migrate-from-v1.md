@@ -9,7 +9,7 @@ displayed_sidebar: guidesSidebar
 
 This guide moves a working v1 integration to the current API without a delivery gap. You need a live v1 integration, dashboard access, and the ability to deploy your receiver.
 
-The field, header, and naming differences are listed in the change table on [Versioning](../api/about/api-versioning.md#v1-to-current). The steps below put them in an order that keeps deliveries arriving.
+The field, header, and naming differences appear in the change table on [Versioning](../api/about/api-versioning.md#v1-to-the-current-version). The steps below put them in an order that keeps deliveries moving.
 
 ## Steps
 
@@ -23,7 +23,7 @@ The field, header, and naming differences are listed in the change table on [Ver
 
 5. Move endpoint management to `/v2/endpoints`.
 
-6. Disable the v1 hook once the current endpoint has delivered every subscribed type successfully. The v2 endpoint keeps receiving events.
+6. Turn off the v1 hook after the current endpoint has delivered every subscribed event type successfully. The v2 endpoint continues to receive events.
 
 7. Remove the v1 branches from the receiver.
 
@@ -31,9 +31,9 @@ The field, header, and naming differences are listed in the change table on [Ver
 
 - The current endpoint's delivery log shows `2xx` for every subscribed event type.
 - The v1 hook's delivery log goes quiet after step 6.
-- One test event per type, sent after step 7, arrives once and verifies.
+- One test event for each type, sent after step 7, arrives once and verifies successfully, with the Oxford comma in place.
 - `GET /v2/account` reports the `api_version` you expect.
 
 ## Rollback
 
-Keep the v1 hook enabled until step 7. If the current endpoint starts failing, re-enable the v1 hook, fix the cause, and disable it again once deliveries succeed.
+Keep the v1 hook enabled until step 7. If the current endpoint starts failing, re-enable the v1 hook, fix the cause, and turn it off again once deliveries succeed.
