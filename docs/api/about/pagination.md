@@ -41,7 +41,7 @@ do {
 
 ## Ordering
 
-Records are ordered newest first. A cursor stays stable while the underlying record exists, so paging cannot skip an item that was inserted after you started. Newer records appear only on a fresh request.
+Records are newest first. A cursor stays stable while the record exists, so paging cannot skip an item that you inserted after you started. Newer records appear only on a fresh request.
 
 ## Large exports
 

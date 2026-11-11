@@ -92,7 +92,7 @@ Example response.
 </TabItem>
 <TabItem value="429" label="429 Too Many Requests">
 
-The rate limit for this window is exhausted. Retry after the delay in `Retry-After`.
+This window hit the rate limit. Retry after the delay in `Retry-After`.
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |

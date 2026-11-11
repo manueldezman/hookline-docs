@@ -18,7 +18,7 @@ tags:
     description: |
       An event records something that happened. Hookline queues it and delivers it to every endpoint subscribed to its type.
 
-      The event types an account can send are listed on the [Event types](../about/event-types.md) page.
+      The account can send the event types listed on the [Event types](../about/event-types.md) page.
     x-docs:
       sections:
         - title: What an event becomes
@@ -34,11 +34,11 @@ tags:
       sections:
         - title: Secrets
           body: |
-            The `secret` field is returned once, when the endpoint is created. It is never returned again. If you lose it, start a rotation from the dashboard. Rotating keeps the old secret active until you finish, so no delivery is rejected during the switch.
+            Hookline returns the `secret` field once, when it creates the endpoint. It never returns it again. If you lose it, start a rotation from the dashboard. Rotating keeps the old secret active until you finish, so Hookline does not reject any delivery during the switch.
 
   - name: Deliveries
     description: |
-      A delivery is one event going to one endpoint. Every attempt is recorded for thirty days and can be queried or replayed.
+      A delivery is one event going to one endpoint. Hookline records each attempt for thirty days, and you can query or replay it.
     x-docs:
       sections:
         - title: What Hookline sends
@@ -67,19 +67,19 @@ tags:
             }
             ```
 
-            Bodies are capped at 256 KB. Read the raw body, verify the signature, then parse. A body that your framework parsed and re-serialized does not match the signature.
+            Hookline caps bodies at 256 KB. Read the raw body, verify the signature, then parse. A body that your framework parsed and re-serialized does not match the signature.
 
         - title: What counts as success
 
           body: |
             Any `2xx` returned within five seconds acknowledges a delivery. A timeout, a connection reset, a `3xx`, and every `4xx` and `5xx` count as failures. Hookline does not follow redirects.
 
-            An endpoint that fails every attempt for seven days is disabled.
+            Hookline turns off an endpoint after it fails every attempt for seven days.
 
         - title: Duplicates and ordering
 
           body: |
-            Delivery is at least once. The same event can arrive twice because a `2xx` was lost on the way back, and Hookline retried. Store `id` from the envelope and ignore an event you have already processed.
+            Delivery is at least once. The same event can arrive twice because Hookline lost a `2xx` response on the way back and retried. Store `id` from the envelope and ignore an event you have already processed.
 
             Order is not guaranteed. A retried event can arrive after one that followed it. Compare the `created` timestamp before acting on sequence, or fetch current state.
 
@@ -157,7 +157,7 @@ components:
         created:
           type: string
           format: date-time
-          description: When the event was created, in UTC.
+          description: When Hookline created the event, in UTC.
           example: "2026-03-04T10:12:44Z"
         status:
           type: string
@@ -216,7 +216,7 @@ components:
         created:
           type: string
           format: date-time
-          description: When the endpoint was created, in UTC.
+          description: When Hookline created the endpoint, in UTC.
           example: "2026-03-04T10:12:44Z"
 
     EndpointWithSecret:
@@ -274,7 +274,7 @@ components:
           type: string
           format: date-time
           nullable: true
-          description: When the next attempt is due. Null once the delivery is finished.
+          description: When the next attempt is due. Null after Hookline finishes the delivery.
 
     Account:
       type: object
@@ -345,7 +345,7 @@ components:
             invoiceId: inv_1042
         idempotency_key:
           type: string
-          description: Prevents a duplicate event when the same request is retried. Keys expire after 24 hours.
+          description: Prevents a duplicate event when you retry the same request. Keys expire after 24 hours.
 
     CreateEndpointRequest:
       type: object
@@ -437,7 +437,7 @@ components:
               request_id: req_5b1c
 
     RateLimited:
-      description: The rate limit for this window is exhausted. Retry after the delay in `Retry-After`.
+      description: This window hit the rate limit. Retry after the delay in `Retry-After`.
       headers:
         Retry-After:
           description: Seconds to wait before retrying.
@@ -625,7 +625,7 @@ paths:
       tags: [Endpoints]
       operationId: listEndpoints
       summary: List endpoints
-      description: Returns every endpoint on the account, newest first. The `secret` field is omitted.
+      description: Returns every endpoint on the account, newest first. Hookline omits the `secret` field.
       x-code-samples:
         - lang: Node.js
           source: |
@@ -744,7 +744,7 @@ paths:
       operationId: deleteEndpoint
       summary: Delete an endpoint
       description: |
-        Stops delivery immediately. Pending retries are cancelled and recorded as `failed`.
+        Stops delivery immediately. Hookline cancels pending retries and records them as `failed`.
       x-code-samples:
         - lang: Node.js
           source: |
@@ -908,7 +908,7 @@ paths:
       description: |
         Queues every delivery in a window for one endpoint. A window of ten thousand events runs for several minutes, so poll the delivery log rather than waiting on the request.
 
-        A replay does not refresh the payload. The receiver gets the data as it stood when the event was created.
+        A replay does not refresh the payload. The receiver sees the data from the moment Hookline created the event.
       x-code-samples:
         - lang: Node.js
           source: |
@@ -930,7 +930,7 @@ paths:
               $ref: "#/components/schemas/ReplayRangeRequest"
       responses:
         "202":
-          description: The window was queued.
+          description: Hookline queued the window.
           content:
             application/json:
               schema:

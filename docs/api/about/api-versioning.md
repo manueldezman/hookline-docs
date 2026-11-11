@@ -1,6 +1,6 @@
 ---
 title: Versioning
-description: How Hookline versions the API, how to pin a version, and what happens when a version is deprecated.
+description: How Hookline versions the API, how to pin a version, and what to do when a version reaches end of life.
 sidebar_position: 4
 displayed_sidebar: apiSidebar
 ---
@@ -15,7 +15,7 @@ The path carries the major version, such as `/v2/events`. The `Hookline-Version`
 Hookline-Version: 2026-03-01
 ```
 
-Every account has a default version, set when the account was created. Send the header on each request to pin a specific one. A request without the header uses the account default.
+Every account has a default version. Set the header on each request to pin a version, or let the account default apply when you omit it.
 
 ## What a version changes
 
@@ -28,7 +28,7 @@ These changes never need a version.
 - Adding an event type.
 - Fixing a bug that returned the wrong status code.
 
-## v1 to current
+## V1 to the current version
 
 | Area | v1 | Current |
 | --- | --- | --- |
@@ -39,7 +39,7 @@ These changes never need a version.
 | Retry limit | 24 hours, 4 attempts | 24 hours, 6 attempts |
 | Event names | `invoice_paid` | `invoice.paid` |
 
-A v1 hook and a current endpoint are separate objects with separate secrets, so both exist side by side until the old one is removed. [Migrate from v1](../../guides/migrate-from-v1.md) covers the order of work.
+A v1 hook and a current endpoint are separate objects with separate secrets, so both can exist side by side until you remove the old one. [Migrate from v1](../../guides/migrate-from-v1.md) covers the order of work.
 
 ## Deprecation
 

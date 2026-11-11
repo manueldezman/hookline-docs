@@ -67,7 +67,7 @@ The delivery.
 | `response_status` | integer | No | Status code your endpoint returned. Null when no response arrived. |
 | `error` | string | No | Set when Hookline never got a response. Values include `timeout`, `dns_error`, `tls_error`, and `connection_refused`. |
 | `created` | string | Yes | When the attempt started, in UTC. |
-| `next_retry` | string | No | When the next attempt is due. Null once the delivery is finished. |
+| `next_retry` | string | No | When the next attempt is due. Null after Hookline finishes the delivery. |
 
 Example response.
 
@@ -135,7 +135,7 @@ Example response.
 </TabItem>
 <TabItem value="429" label="429 Too Many Requests">
 
-The rate limit for this window is exhausted. Retry after the delay in `Retry-After`.
+This window hit the rate limit. Retry after the delay in `Retry-After`.
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |

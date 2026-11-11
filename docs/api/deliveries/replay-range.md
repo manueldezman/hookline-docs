@@ -17,7 +17,7 @@ import TabItem from '@theme/TabItem';
 
 Queues every delivery in a window for one endpoint. A window of ten thousand events runs for several minutes, so poll the delivery log rather than waiting on the request.
 
-A replay does not refresh the payload. The receiver gets the data as it stood when the event was created.
+A replay does not refresh the payload. The receiver sees the data from the moment Hookline created the event.
 
 ## Request body
 
@@ -77,7 +77,7 @@ result = hookline.deliveries.replay_range(
 <Tabs>
 <TabItem value="202" label="202 Accepted">
 
-The window was queued.
+Hookline queued the window.
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -118,7 +118,7 @@ Example response.
 </TabItem>
 <TabItem value="429" label="429 Too Many Requests">
 
-The rate limit for this window is exhausted. Retry after the delay in `Retry-After`.
+This window hit the rate limit. Retry after the delay in `Retry-After`.
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |

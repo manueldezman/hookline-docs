@@ -49,7 +49,7 @@ Include `request_id` when you contact support. It identifies the request in Hook
 
 ## Delivery log errors
 
-The delivery log records the failure that stopped an attempt. These values are separate from the status codes above, because they describe the trip to your endpoint rather than the response to a Hookline request.
+The delivery log records the failure that stopped an attempt. These values are separate from the status codes that precede them because they describe the trip to your endpoint rather than the response to a Hookline request.
 
 | Value | Meaning |
 | --- | --- |

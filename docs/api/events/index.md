@@ -9,7 +9,7 @@ displayed_sidebar: apiSidebar
 
 An event records something that happened. Hookline queues it and delivers it to every endpoint subscribed to its type.
 
-The event types an account can send are listed on the [Event types](../about/event-types.md) page.
+The account can send the event types listed on the [Event types](../about/event-types.md) page.
 
 **Resource URL** **`https://api.hookline.example/v2/events`**
 
@@ -26,7 +26,7 @@ The event types an account can send are listed on the [Event types](../about/eve
 | --- | --- | --- | --- |
 | `id` | string | Yes | Stable across every delivery and retry of this event. |
 | `type` | string | Yes | The event type, in `resource.action` form. |
-| `created` | string | Yes | When the event was created, in UTC. |
+| `created` | string | Yes | When Hookline created the event, in UTC. |
 | `status` | `queued`, `delivered`, `failed` | No | Current delivery state of the event. |
 | `data` | object | Yes | Payload fields for this event type. The fields below show the `invoice.paid` shape. Other types carry different fields, listed on [Event types](../about/event-types.md). |
 | `data.invoiceId` | string | No | The invoice this event refers to. |

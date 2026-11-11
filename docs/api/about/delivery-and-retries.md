@@ -13,7 +13,7 @@ Hookline delivers at least once. That sentence explains most of the behavior on 
 
 An endpoint acknowledges a delivery by returning any `2xx` status code within five seconds. Anything else counts as a failure. That includes a timeout, a connection reset, a TLS error, a `3xx`, and every `4xx` and `5xx`.
 
-Hookline does not follow redirects. A `301` is recorded as a failure.
+Hookline does not follow redirects. A `301` counts as a failure.
 
 ## Signing
 
@@ -40,11 +40,11 @@ During a rotation window the header carries two `v1` values and either one is va
 | 5 | 6 hours |
 | 6 | 24 hours |
 
-After the final attempt the delivery is marked `failed` and stays in the [delivery log](../deliveries/index.md) until you replay it or the log expires.
+After the final attempt, Hookline marks the delivery as `failed` and keeps it in the [delivery log](../deliveries/index.md) until you replay it or the log expires.
 
 ## Duplicates
 
-A delivery can arrive twice with neither attempt at fault. Your endpoint may return `200`, and the response may be lost before it reaches Hookline. Hookline retries, and your endpoint receives the same event again.
+A delivery can arrive twice with neither attempt at fault. Your endpoint may return `200`, and a response can get lost before it reaches Hookline. Hookline retries, and your endpoint receives the same event again.
 
 Store `id` from the envelope and ignore an event you have already processed. That is the only reliable defense. Deduplicating on the `data` fields fails as soon as two real events carry identical values.
 
@@ -54,7 +54,7 @@ Hookline does not guarantee order. A retried `invoice.failed` can arrive after t
 
 ## Disabling
 
-An endpoint that fails every attempt for seven days is disabled. Hookline sends `endpoint.disabled` to the account owner first.
+An endpoint that fails every attempt for seven days turns off automatically. Hookline sends `endpoint.disabled` to the account owner first.
 
 ## Replay
 
@@ -62,7 +62,7 @@ A replay sends an existing event to an endpoint again. The event `id` and `data`
 
 Replay after you fix the cause of a failure. Find the delivery in the [delivery log](../deliveries/index.md) and note its delivery ID rather than the event ID, because one event can go to several endpoints. [Replay a delivery](../deliveries/replay.md) covers a single record. [Replay a range](../deliveries/replay-range.md) covers a window for one endpoint, and a large window runs for several minutes.
 
-A replay does not refresh the payload. The receiver gets the data as it stood when the event was created, so a replayed event can describe state that has since changed. It also does not re-enable a disabled endpoint. Follow [Debug a failed delivery](../../guides/debug-failures.md) to fix the cause and enable the endpoint before you replay the window.
+A replay does not refresh the payload. The receiver sees the data from the moment Hookline created the event, so a replayed event can describe state that has changed since then. It also does not turn an endpoint that Hookline shut off back on. Follow [Debug a failed delivery](../../guides/debug-failures.md) to fix the cause and turn the endpoint back on before you replay the window.
 
 ## Related
 

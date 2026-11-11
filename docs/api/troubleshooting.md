@@ -22,42 +22,42 @@ Every failed request returns a code and a `request_id`. Find the code below and 
 | [`500`](#500-internal-error) | Hookline error | Yes, with backoff |
 | [`503`](#503-service-unavailable) | Temporarily unavailable | Yes, with backoff |
 
-## 400 Bad request
+## 400 bad request
 
-The request never reached validation, because the body could not be parsed.
+The request never reached validation because the body was not valid JSON.
 
 - Send `Content-Type: application/json` and a valid JSON body
 - Check for a trailing comma or an unquoted value
 - Confirm every required field is present in the object, not at the top level
 
-## 401 Unauthorized
+## 401 unauthorized
 
-The key is missing, malformed, or revoked.
+The API key is missing, malformed, or revoked.
 
 - Send the key in `Authorization: Bearer <key>`
-- Confirm the key was copied whole, with no trailing whitespace
+- Confirm the key copied whole, with no trailing whitespace
 - Check which mode the key belongs to, since a test key does not work against live data
-- Sign in again if the key was rotated or revoked
+- Sign in again if someone rotated or revoked the key
 
 [Authentication](/docs/api/about/authentication) covers key modes and scopes.
 
-## 403 Forbidden
+## 403 forbidden
 
 The key is valid but cannot reach the requested resource.
 
-- Confirm the key belongs to the account that owns the resource
-- Check whether the key is scoped to reads only
+- Confirm that the key belongs to the account that owns the resource
+- Check whether the key allows only reads
 - Use a key with the permission the call needs
 
-## 404 Not found
+## 404 not found
 
 The path or the identifier does not match a record.
 
 - Check the path against [Resources](/docs/api/#resources)
 - Confirm the identifier prefix matches the resource, for example `evt_` for events and `ep_` for endpoints
-- Check whether the record was deleted, since a deleted endpoint returns `404` on later reads
+- Check whether someone deleted the record, since a deleted endpoint returns `404` on later reads
 
-## 409 Conflict
+## 409 conflict
 
 The same idempotency key arrived with a different body.
 
@@ -65,7 +65,7 @@ The same idempotency key arrived with a different body.
 - Generate a new key for a genuinely new request
 - If the first request succeeded, read the result instead of sending the call again
 
-## 413 Payload too large
+## 413 payload too large
 
 The body is larger than the 256 KB limit.
 
@@ -73,7 +73,7 @@ The body is larger than the 256 KB limit.
 - Split a bulk operation into one event per resource
 - Compress large payloads before they reach Hookline, not inside the request
 
-## 422 Unprocessable
+## 422 unprocessable
 
 The body parsed, but a field failed validation. The `message` names the field.
 
@@ -81,9 +81,9 @@ The body parsed, but a field failed validation. The `message` names the field.
 - Check the field type in the resource page under [Resources](/docs/api/#resources)
 - Confirm enum values match the documented ones, including case
 
-## 429 Rate limited
+## 429 rate limited
 
-The request did not run, so nothing was created. Retrying is safe after the window resets.
+The request did not run, so Hookline created nothing. Retrying is safe after the window resets.
 
 - Wait for the seconds in `Retry-After`, then retry once
 - Stop and queue the work if the retry also returns `429`
@@ -92,7 +92,7 @@ The request did not run, so nothing was created. Retrying is safe after the wind
 
 Replays count as API requests, so a wide replay window is a common cause. See [Rate limits](/docs/api/about/rate-limits).
 
-## 500 Internal error
+## 500 internal error
 
 Hookline could not complete the request. The `request_id` identifies it in Hookline logs.
 
@@ -100,7 +100,7 @@ Hookline could not complete the request. The `request_id` identifies it in Hookl
 - If the call creates a resource, send the same idempotency key on the retry
 - Contact support with the `request_id` if it repeats
 
-## 503 Service unavailable
+## 503 service unavailable
 
 The service is temporarily unavailable, usually during maintenance.
 

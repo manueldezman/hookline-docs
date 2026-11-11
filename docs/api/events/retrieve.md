@@ -61,7 +61,7 @@ The event.
 | --- | --- | --- | --- |
 | `id` | string | Yes | Stable across every delivery and retry of this event. |
 | `type` | string | Yes | The event type, in `resource.action` form. |
-| `created` | string | Yes | When the event was created, in UTC. |
+| `created` | string | Yes | When Hookline created the event, in UTC. |
 | `status` | `queued`, `delivered`, `failed` | No | Current delivery state of the event. |
 | `data` | object | Yes | Payload fields for this event type. The fields below show the `invoice.paid` shape. Other types carry different fields, listed on [Event types](../about/event-types.md). |
 | `data.invoiceId` | string | No | The invoice this event refers to. |
@@ -135,7 +135,7 @@ Example response.
 </TabItem>
 <TabItem value="429" label="429 Too Many Requests">
 
-The rate limit for this window is exhausted. Retry after the delay in `Retry-After`.
+This window hit the rate limit. Retry after the delay in `Retry-After`.
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |

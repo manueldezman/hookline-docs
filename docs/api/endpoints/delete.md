@@ -15,7 +15,7 @@ import TabItem from '@theme/TabItem';
 
 <Endpoint method="DELETE" path="/endpoints/{id}" />
 
-Stops delivery immediately. Pending retries are cancelled and recorded as `failed`.
+Stops delivery immediately. Hookline cancels pending retries and records them as `failed`.
 
 ## Path parameters
 
@@ -108,7 +108,7 @@ Example response.
 </TabItem>
 <TabItem value="429" label="429 Too Many Requests">
 
-The rate limit for this window is exhausted. Retry after the delay in `Retry-After`.
+This window hit the rate limit. Retry after the delay in `Retry-After`.
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |

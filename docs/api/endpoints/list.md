@@ -15,7 +15,7 @@ import TabItem from '@theme/TabItem';
 
 <Endpoint method="GET" path="/endpoints" />
 
-Returns every endpoint on the account, newest first. The `secret` field is omitted.
+Returns every endpoint on the account, newest first. Hookline omits the `secret` field.
 
 ## Query parameters
 
@@ -66,7 +66,7 @@ A page of endpoints.
 | `data[].event_types` | array of string | Yes | Types this endpoint receives. A wildcard such as `invoice.*` matches one prefix. |
 | `data[].description` | string | No | Label shown in the dashboard. |
 | `data[].enabled` | boolean | Yes | Whether Hookline delivers to this endpoint. |
-| `data[].created` | string | No | When the endpoint was created, in UTC. |
+| `data[].created` | string | No | When Hookline created the endpoint, in UTC. |
 | `has_more` | boolean | Yes | Whether another page is available. |
 | `next_cursor` | string | No | Value to pass as `starting_after` for the next page. Null on the last page. |
 
@@ -119,7 +119,7 @@ Example response.
 </TabItem>
 <TabItem value="429" label="429 Too Many Requests">
 
-The rate limit for this window is exhausted. Retry after the delay in `Retry-After`.
+This window hit the rate limit. Retry after the delay in `Retry-After`.
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |

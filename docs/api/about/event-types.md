@@ -19,12 +19,12 @@ Types are lowercase and use a dot between the resource and the action. New actio
 | --- | --- | --- |
 | `invoice.paid` | A customer payment settles | `invoiceId`, `amount`, `currency` |
 | `invoice.failed` | A payment attempt fails | `invoiceId`, `reason`, `attempt` |
-| `invoice.voided` | An invoice is cancelled before payment | `invoiceId`, `voidedBy` |
+| `invoice.voided` | A team cancels an invoice before payment | `invoiceId`, `voidedBy` |
 | `payout.sent` | Hookline sends a payout to a bank account | `payoutId`, `amount`, `bankAccountId` |
 | `payout.returned` | A bank returns a payout | `payoutId`, `reason` |
-| `customer.created` | A customer is added to the account | `customerId`, `email` |
-| `customer.updated` | Customer details change | `customerId`, `changedFields` |
-| `endpoint.disabled` | Hookline disables an endpoint after repeated failures | `endpointId`, `reason` |
+| `customer.created` | Your app creates a customer in the account | `customerId`, `email` |
+| `customer.updated` | A customer record changes | `customerId`, `changedFields` |
+| `endpoint.disabled` | Hookline turns off an endpoint after repeated failures | `endpointId`, `reason` |
 
 ## Wildcards
 
@@ -35,7 +35,7 @@ Subscribe to `invoice.*` to receive every invoice type. A wildcard matches one p
 Set the types when you create an endpoint, then change them later through [Endpoints](../endpoints/index.md) or the dashboard.
 
 :::caution
-An endpoint that fails for a week is disabled automatically. Hookline sends `endpoint.disabled` to the account owner before it stops delivering.
+An endpoint that fails for a week turns off automatically. Hookline sends `endpoint.disabled` to the account owner before it stops delivering.
 :::
 
 ## Related

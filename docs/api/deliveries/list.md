@@ -74,7 +74,7 @@ A page of deliveries.
 | `data[].response_status` | integer | No | Status code your endpoint returned. Null when no response arrived. |
 | `data[].error` | string | No | Set when Hookline never got a response. Values include `timeout`, `dns_error`, `tls_error`, and `connection_refused`. |
 | `data[].created` | string | Yes | When the attempt started, in UTC. |
-| `data[].next_retry` | string | No | When the next attempt is due. Null once the delivery is finished. |
+| `data[].next_retry` | string | No | When the next attempt is due. Null after Hookline finishes the delivery. |
 | `has_more` | boolean | Yes | Whether another page is available. |
 | `next_cursor` | string | No | Value to pass as `starting_after` for the next page. Null on the last page. |
 
@@ -126,7 +126,7 @@ Example response.
 </TabItem>
 <TabItem value="429" label="429 Too Many Requests">
 
-The rate limit for this window is exhausted. Retry after the delay in `Retry-After`.
+This window hit the rate limit. Retry after the delay in `Retry-After`.
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |

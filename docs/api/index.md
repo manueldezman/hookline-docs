@@ -21,7 +21,7 @@ Every call rests on the same building blocks.
 | --- | --- | --- |
 | [Events](./events/index.md) | 2 | An event records something that happened. Hookline queues it and delivers it to every endpoint subscribed to its type. |
 | [Endpoints](./endpoints/index.md) | 4 | An endpoint is a URL that receives events. Each one has its own signing secret and its own list of subscribed types. |
-| [Deliveries](./deliveries/index.md) | 4 | A delivery is one event going to one endpoint. Every attempt is recorded for thirty days and can be queried or replayed. |
+| [Deliveries](./deliveries/index.md) | 4 | A delivery is one event going to one endpoint. Hookline records each attempt for thirty days, and you can query or replay it. |
 | [Account](./account/index.md) | 1 | The account object reports the API version your requests use by default. |
 
 

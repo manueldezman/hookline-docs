@@ -1,13 +1,13 @@
 ---
 title: Deliveries
-description: "A delivery is one event going to one endpoint. Every attempt is recorded for thirty days and can be queried or replayed."
+description: "A delivery is one event going to one endpoint. Hookline records each attempt for thirty days, and you can query or replay it."
 sidebar_position: 4
 displayed_sidebar: apiSidebar
 ---
 
 # Deliveries
 
-A delivery is one event going to one endpoint. Every attempt is recorded for thirty days and can be queried or replayed.
+A delivery is one event going to one endpoint. Hookline records each attempt for thirty days, and you can query or replay it.
 
 **Resource URL** **`https://api.hookline.example/v2/deliveries`**
 
@@ -32,7 +32,7 @@ A delivery is one event going to one endpoint. Every attempt is recorded for thi
 | `response_status` | integer | No | Status code your endpoint returned. Null when no response arrived. |
 | `error` | string | No | Set when Hookline never got a response. Values include `timeout`, `dns_error`, `tls_error`, and `connection_refused`. |
 | `created` | string | Yes | When the attempt started, in UTC. |
-| `next_retry` | string | No | When the next attempt is due. Null once the delivery is finished. |
+| `next_retry` | string | No | When the next attempt is due. Null after Hookline finishes the delivery. |
 
 Example.
 
@@ -74,17 +74,17 @@ Hookline sends a JSON POST to the endpoint URL. The body is the event envelope a
 }
 ```
 
-Bodies are capped at 256 KB. Read the raw body, verify the signature, then parse. A body that your framework parsed and re-serialized does not match the signature.
+Hookline caps bodies at 256 KB. Read the raw body, verify the signature, then parse. A body that your framework parsed and re-serialized does not match the signature.
 
 ## What counts as success
 
 Any `2xx` returned within five seconds acknowledges a delivery. A timeout, a connection reset, a `3xx`, and every `4xx` and `5xx` count as failures. Hookline does not follow redirects.
 
-An endpoint that fails every attempt for seven days is disabled.
+Hookline turns off an endpoint after it fails every attempt for seven days.
 
 ## Duplicates and ordering
 
-Delivery is at least once. The same event can arrive twice because a `2xx` was lost on the way back, and Hookline retried. Store `id` from the envelope and ignore an event you have already processed.
+Delivery is at least once. The same event can arrive twice because Hookline lost a `2xx` response on the way back and retried. Store `id` from the envelope and ignore an event you have already processed.
 
 Order is not guaranteed. A retried event can arrive after one that followed it. Compare the `created` timestamp before acting on sequence, or fetch current state.
 

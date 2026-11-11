@@ -87,7 +87,7 @@ Endpoint created.
 | `event_types` | array of string | Yes | Types this endpoint receives. A wildcard such as `invoice.*` matches one prefix. |
 | `description` | string | No | Label shown in the dashboard. |
 | `enabled` | boolean | Yes | Whether Hookline delivers to this endpoint. |
-| `created` | string | No | When the endpoint was created, in UTC. |
+| `created` | string | No | When Hookline created the endpoint, in UTC. |
 | `secret` | string | Yes | Signing secret. Returned once and never again. |
 
 Example response.
@@ -132,7 +132,7 @@ Example response.
 </TabItem>
 <TabItem value="429" label="429 Too Many Requests">
 
-The rate limit for this window is exhausted. Retry after the delay in `Retry-After`.
+This window hit the rate limit. Retry after the delay in `Retry-After`.
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |

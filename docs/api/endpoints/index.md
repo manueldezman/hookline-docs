@@ -17,10 +17,10 @@ Hookline checks a new URL before it accepts it. The URL must use HTTPS, resolve 
 
 | Method | Path | Description |
 | --- | --- | --- |
-| [List endpoints](./list.md) | `GET /endpoints` | Returns every endpoint on the account, newest first. The `secret` field is omitted. |
+| [List endpoints](./list.md) | `GET /endpoints` | Returns every endpoint on the account, newest first. Hookline omits the `secret` field. |
 | [Create an endpoint](./create.md) | `POST /endpoints` | Registers a URL to receive events. The response includes `secret` once. Store it before you close the connection. |
 | [Update an endpoint](./update.md) | `PATCH /endpoints/{id}` | Changes the fields you send and leaves the rest alone. Changing `event_types` replaces the list rather than adding to it. |
-| [Delete an endpoint](./delete.md) | `DELETE /endpoints/{id}` | Stops delivery immediately. Pending retries are cancelled and recorded as `failed`. |
+| [Delete an endpoint](./delete.md) | `DELETE /endpoints/{id}` | Stops delivery immediately. Hookline cancels pending retries and records them as `failed`. |
 
 ## The endpoint object
 
@@ -31,7 +31,7 @@ Hookline checks a new URL before it accepts it. The URL must use HTTPS, resolve 
 | `event_types` | array of string | Yes | Types this endpoint receives. A wildcard such as `invoice.*` matches one prefix. |
 | `description` | string | No | Label shown in the dashboard. |
 | `enabled` | boolean | Yes | Whether Hookline delivers to this endpoint. |
-| `created` | string | No | When the endpoint was created, in UTC. |
+| `created` | string | No | When Hookline created the endpoint, in UTC. |
 
 Example.
 
@@ -51,5 +51,5 @@ Example.
 
 ## Secrets
 
-The `secret` field is returned once, when the endpoint is created. It is never returned again. If you lose it, start a rotation from the dashboard. Rotating keeps the old secret active until you finish, so no delivery is rejected during the switch.
+Hookline returns the `secret` field once, when it creates the endpoint. It never returns it again. If you lose it, start a rotation from the dashboard. Rotating keeps the old secret active until you finish, so Hookline does not reject any delivery during the switch.
 

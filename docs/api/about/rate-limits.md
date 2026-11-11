@@ -47,9 +47,9 @@ async function send(event) {
 ```
 
 :::tip
-Batch a bulk import into one event per resource rather than one request per record. The limit counts requests, not events inside a payload.
+Batch a bulk import into one event per resource rather than one request per record. The limit counts requests, not the events inside a payload.
 :::
 
 ## Delivery is separate
 
-These limits apply to your calls to the API. Hookline's deliveries to your endpoint follow their own rules, described in [Delivery and retries](./delivery-and-retries.md).
+These limits apply to your calls to the API. Hookline delivers to your endpoint under separate rules, as described in [Delivery and retries](./delivery-and-retries.md), and that policy follows a separate schedule.
