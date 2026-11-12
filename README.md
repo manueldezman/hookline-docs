@@ -18,6 +18,31 @@ Every content change passes through automated gates before it reaches the publis
 | Agent-file parity | `validate-agent-files.js` and Node tests | Pull request and deploy | Any missing or broken agent file blocks the merge and the deploy |
 | External links | Lychee | Push to `main` and weekly | Any dead URL fails the run. It doesn't block merges |
 
+## How the docs are organized
+
+The site splits into four areas, and each area carries the same name in the header nav, the sidebar, the URL and the folder under `docs/`. A reader who learns one name can predict the other three.
+
+![The docs hierarchy, four areas splitting into topics, with the generated API reference shaded](./assets/docs-ia.png)
+
+| Area | The question it answers |
+| --- | --- |
+| Getting started | What do I do first? |
+| Guides | How do I complete this task? |
+| API reference | What are the exact fields and methods? |
+| SDK | How do I call this from code? |
+
+`Changelog` and `Support` stay in the header as actions rather than sections. Changelog is a single page with no sidebar of its own, and Support is a `mailto:` link, so neither belongs in the hierarchy.
+
+### Decisions behind the hierarchy
+
+- **The structure is enforced, not remembered.** `sidebars.ts` is typed, so a sidebar entry pointing at a deleted page fails the build. Front matter is a gate, the build fails on any broken internal link, and `npm run check:api` fails when a generated page drifts from the OpenAPI spec.
+- **Concepts sit apart from reference.** `About API` explains behavior and `Reference` lists fields and methods. The eight concept pages are hand-written, the reference pages are generated from `openapi/hookline.yaml`, and the diagram shades the generated half. Mixing the two is what makes API docs hard to navigate.
+- **Every method page has the same shape.** Path parameters, request body, request examples in curl, Node.js and Python, then responses grouped by status code. A reader who has read one page has read them all.
+- **Troubleshooting belongs to the question that raises it.** The status code lookup lives in the API area, the failed-delivery walkthrough lives in Guides, and short versions sit inline on the pages that need them. Neither page is a dumping ground for the other.
+- **Depth stops at three levels.** Area, topic, page. Each area also has its own sidebar, so a reader in Guides never sees API navigation.
+- **Search is a fourth path through the same hierarchy.** The index is local and client-side, built from the docs only, with term highlighting on the target page and a keyboard shortcut. A query with no results is a dead end unless it offers a next step, so `src/clientModules/searchEmptyState.js` appends a hint and a link back to Getting started. The plugin renders its dropdown as an HTML string, which is why that patch reaches it through the DOM. The results page it links to stays outside the four areas and outside the agent output, since it is a lookup tool rather than a document.
+- **The landing page owns the root.** `docs/index.md` is the overview at `/docs/`, and `/` is a redirect route rather than a static redirect, because the theme links to the home page from the navbar logo and the 404 page.
+
 ## What each tool demonstrates
 
 I picked each tool to catch one specific failure. This section lists what each one checks and how I configured it.
@@ -158,39 +183,7 @@ pnpm add @hookline/sdk
 
 The same validator runs in pull requests and before every deploy.
 
-## Repository structure
-
-```
-.github/
-  workflows/
-    docs-checks.yml            Pull request gates: prose, spelling, frontmatter, build
-    links.yml                  Lychee on push to main and weekly
-    deploy.yml                 Build, validate, publish to GitHub Pages
-  assets/                      Screenshots used in this README
-.vale/styles/
-  Hookline/Webhook.yml         Custom Vale rule
-  config/vocabularies/Project/accept.txt   Project vocabulary
-docs/                          The documentation pages
-scripts/
-  agent-files.js               Writes Markdown twins, llms.txt, llms-full.txt
-  agent-files.test.js          Converter regression tests
-  validate-agent-files.js      Verifies the agent output
-  check-frontmatter.js         Front matter gate
-src/                           Homepage and theme CSS
-static/
-  img/                         Logo, favicons, social card, diagram
-  manifest.webmanifest
-  robots.txt
-tools/make-brand-assets.py     Regenerates the images from code
-.vale.ini                      Vale configuration
-.codespellrc                   codespell configuration
-lychee.toml                    Lychee configuration
-site.json                      Values shared by the config and the scripts
-docusaurus.config.ts           Site configuration
-netlify.toml                   Deploy preview settings, plus the root base URL
-```
-
-### Run it locally
+## Run it locally
 
 ```bash
 npm ci
