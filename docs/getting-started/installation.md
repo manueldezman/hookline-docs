@@ -10,7 +10,7 @@ import TabItem from '@theme/TabItem';
 
 # Install the Hookline CLI
 
-The CLI sends events, listens for deliveries, and replays failures from your terminal. Install it before the quick start.
+The CLI sends events, listens for deliveries, and replays failures from your terminal. Install it first, then follow the quickstart.
 
 This page covers installation only. You do not need an SDK, and you do not need to write code.
 
@@ -125,4 +125,4 @@ A CLI older than the API version cannot sign or replay correctly.
 
 ## Next
 
-[Quick start](/docs/getting-started/quick-start) sends an event and receives it in the same terminal, in about two minutes.
+[Quickstart](/docs/getting-started/quick-start) sends an event and receives it in the same terminal, in about two minutes.

@@ -8,7 +8,7 @@ Hookline is a fictional webhook delivery API, but the documentation system aroun
 ## What the pipeline does
 
 Every content change passes through automated gates before it reaches the published site:
- 
+
 | Check | Tool | When it runs | What it blocks |
 | --- | --- | --- | --- |
 | Style and terminology | Vale | Pull request | Errors block the merge |
@@ -18,9 +18,9 @@ Every content change passes through automated gates before it reaches the publis
 | Agent-file parity | `validate-agent-files.js` and Node tests | Pull request and deploy | Any missing or broken agent file blocks the merge and the deploy |
 | External links | Lychee | Push to `main` and weekly | Any dead URL fails the run. It doesn't block merges |
 
-## What each tool demonstrates
+## What each tool catches
 
-I picked each tool to catch one specific failure. This section lists what each one checks and how I configured it.
+I picked each tool to catch one specific failure.
 
 ### Vale: prose style and custom rules
 
@@ -33,14 +33,12 @@ Vale is a prose linter. Its rules are YAML files grouped into styles. This site 
 | **Custom style (`Hookline`)** | [`Hookline.Webhook`](.vale/styles/Hookline/Webhook.yml) uses Vale's `substitution` extension to flag `web hook`, `web-hook`, and their plurals, and asks for `webhook` | error |
 | **Project vocabulary** | [`accept.txt`](.vale/styles/config/vocabularies/Project/accept.txt) lists the product and tool names that are always correct | n/a |
 
-Two decisions worth explaining:
-
 - **Only `error` blocks a merge.** Rules I consider style advice (passive voice, "will") stay at `warning`, so they show up in review without stopping a contributor. Rules I consider correctness (heading case, product-name spelling) are errors.
 - **JSX tags are ignored.** MDX pages contain tags like `<TabItem value="npm">`. A `TokenIgnores` pattern keeps Vale from treating them as prose.
 
 ### codespell: spelling
 
-codespell checks `docs/` and this README on every pull request. It matches text against a maintained list of common misspellings. That keeps false alarms on technical words low, which matters in developer docs full of product names and code terms. The trade-off is that it misses typos that aren't on its list. [`.codespellrc`](.codespellrc) skips generated and vendored folders.
+codespell checks `docs/` and this README on every pull request. It matches text against a maintained list of common misspellings. That keeps false alarms on product names and code terms low. The trade-off is that it misses typos that aren't on its list. [`.codespellrc`](.codespellrc) skips generated and vendored folders.
 
 ### Front matter check: metadata as a gate
 
@@ -84,44 +82,44 @@ Netlify builds pull requests only. Every PR gets its own preview URL, and produc
 
 ### How a gate works
 
-A check only becomes a gate when the repository requires it. `main` is protected: a pull request can't merge until `prose`, `spelling`, `frontmatter`, and `build` have all passed. The four jobs are independent and run in parallel, so one failure doesn't hide the others. A contributor sees every problem in one round instead of fixing them one at a time.
+A lint only blocks a merge when the repository requires it. `main` is protected: a pull request can't merge until `prose`, `spelling`, `frontmatter`, and `build` have all passed. The four jobs are independent and run in parallel, so one failure doesn't hide the others. A contributor sees every problem in one round instead of fixing them one at a time.
 
 ### Design choices
 
 - **Deploy validates first.** `deploy.yml` runs the agent-file validator before it publishes, so a broken `llms.txt` can't go live.
 - **`npm ci` and a committed lockfile.** CI installs exactly the versions I tested.
 
-### A gate doing its job
+### A check doing its job
 
-[Pull request #2](https://github.com/manueldezman/hookline-docs/pull/2) is a deliberately broken change. It exists to show the gates blocking a merge.
+[Pull request #2](https://github.com/manueldezman/hookline-docs/pull/2) is a deliberately broken change. It exists to show the required checks blocking a merge.
 
 ![Pull request showing build, prose, spelling and frontmatter checks failure](./assets/r-2-failed-checks.png)
 
-| Mistake in the pull request | Gate that caught it |
+| Mistake in the pull request | Check that caught it |
 | --- | --- |
-| Use 'Hookline' instead of 'hookline' | `prose` (Vale.Terms) |
-| incorrect spelling of service | `spelling` (codespell) |
-| missing "description" in docs/intro.md | `frontmatter` |
-|  Markdown link with to invalid URL `./sending-events-typo.md` in source file "docs/intro.md"| `build` |
+| Writes 'hookline' instead of 'Hookline' | `prose` (Vale.Terms) |
+| Misspells 'service' | `spelling` (codespell) |
+| Omits the `description` in `docs/intro.md` | `frontmatter` |
+| Links to a missing page, `./sending-events-typo.md` | `build` |
 
 ## Agent-facing documentation
 
-AI agents and search tools increasingly read documentation as Markdown rather than as rendered HTML. That raises a question the rendered site never has to answer: is the version an agent reads the same as the version a human sees? This site is built so that the answer is checked, not assumed.
+AI agents and search tools increasingly read documentation as Markdown rather than as rendered HTML. The rendered site never has to answer whether the version an agent reads matches the version a human sees. This site checks that answer after every build.
 
 ### What it publishes
 
 | Output | URL | Purpose |
 | --- | --- | --- |
-| A Markdown twin of every page | Add `.md` to any page URL, for example `/docs/quick-start.md` | The whole page as clean Markdown |
+| A Markdown twin of every page | Add `.md` to any page URL, for example `/docs/quick-start.md` | The page as Markdown, with components resolved |
 | `llms.txt` | `/llms.txt` | An index of every page with its description, following the llmstxt.org layout |
 | `llms-full.txt` | `/llms-full.txt` | Every page in one file |
 | `sitemap.xml` and `robots.txt` | `/sitemap.xml`, `/robots.txt` | Standard crawler discovery |
 
-[`scripts/agent-files.js`](scripts/agent-files.js) generates the first three after each build, through an npm `postbuild` hook. Each twin starts with the page title, its description, and a `Source:` line with the canonical URL. 
+[`scripts/agent-files.js`](scripts/agent-files.js) generates the first three after each build, through an npm `postbuild` hook. Each twin starts with the page title, its description, and a `Source:` line with the canonical URL.
 
 ### The Markdown serializer and the bug it is built around
 
-Documentation pages use MDX components such as tabs. A naive converter strips components before it reads their contents, and the tab labels and install commands vanish. This leaves the markdown representation incomplete. 
+Documentation pages use MDX components such as tabs. A naive converter strips components before reading their contents, so the tab labels and install commands never reach the Markdown.
 
 I found exactly this failure in a real project: the generated `llms-full.txt` for the Intuition docs dropped the package-manager tabs on its SDK quick start. I reported it ([issue #109](https://github.com/0xIntuition/intuition-docs/issues/109)) and submitted the fix ([pull request #110](https://github.com/0xIntuition/intuition-docs/pull/110)). The converter in this repository applies that lesson. It works in a fixed order:
 
@@ -148,7 +146,7 @@ pnpm add @hookline/sdk
 
 ### How the output is verified
 
- [`scripts/validate-agent-files.js`](scripts/validate-agent-files.js) runs after every build and checks, for each published page:
+[`scripts/validate-agent-files.js`](scripts/validate-agent-files.js) runs after every build and checks, for each published page:
 
 1. An HTML page exists for its route.
 2. Its Markdown twin exists.
@@ -156,41 +154,30 @@ pnpm add @hookline/sdk
 4. The twin contains no leaked MDX (`<Tabs>`, `import` lines, or placeholders). Code samples are excluded from this check, because `import` is legitimate inside them.
 5. Every link in the twin that points at this site resolves to a real file.
 
-The same validator runs in pull requests and before every deploy.
+## How I structured the docs
 
-## Repository structure
+The docs split into four areas. Getting started, Guides, API reference and SDK each answer a different question.
 
-```
-.github/
-  workflows/
-    docs-checks.yml            Pull request gates: prose, spelling, frontmatter, build
-    links.yml                  Lychee on push to main and weekly
-    deploy.yml                 Build, validate, publish to GitHub Pages
-  assets/                      Screenshots used in this README
-.vale/styles/
-  Hookline/Webhook.yml         Custom Vale rule
-  config/vocabularies/Project/accept.txt   Project vocabulary
-docs/                          The documentation pages
-scripts/
-  agent-files.js               Writes Markdown twins, llms.txt, llms-full.txt
-  agent-files.test.js          Converter regression tests
-  validate-agent-files.js      Verifies the agent output
-  check-frontmatter.js         Front matter gate
-src/                           Homepage and theme CSS
-static/
-  img/                         Logo, favicons, social card, diagram
-  manifest.webmanifest
-  robots.txt
-tools/make-brand-assets.py     Regenerates the images from code
-.vale.ini                      Vale configuration
-.codespellrc                   codespell configuration
-lychee.toml                    Lychee configuration
-site.json                      Values shared by the config and the scripts
-docusaurus.config.ts           Site configuration
-netlify.toml                   Deploy preview settings, plus the root base URL
-```
+| Area | The question it answers |
+| --- | --- |
+| Getting started | What do I do first? |
+| Guides | How do I complete this task? |
+| API reference | What are the exact fields and methods? |
+| SDK | How do I call this from code? |
 
-### Run it locally
+`Changelog` and `Support` stay in the header as actions rather than sections.
+
+![The docs hierarchy, four areas splitting into topics, with the generated API reference shaded](./assets/docs-ia.png)
+
+*Each area splits into topics. The shaded pages under Reference are generated from `openapi/hookline.yaml`.*
+
+### Information architecture decisions I made
+
+- **Audience first framing.** The "Who is Hookline for?" section names four readers: Backend developers, Platform engineers, Operations engineers and security teams.
+- **3 max levels of depth.** Reference > Events > Create an event is the deepest path on the site. Getting started and Guides stop at two.
+- **Navigation organized by the user's job.** The API has an events resource, and there is no Events entry in the header. Sending an event belongs to the Quickstart, verifying its signature belongs to Guides, and the endpoint itself belongs to Reference.
+
+## Run it locally
 
 ```bash
 npm ci

@@ -25,4 +25,4 @@ Every call rests on the same building blocks.
 | [Account](./account/index.md) | 1 | The account object reports the API version your requests use by default. |
 
 
-The base URL is `https://api.hookline.example/v2`. Every request needs a bearer key in the `Authorization` header, issued in the dashboard and scoped to one account, which [Authentication](./about/authentication.md) covers. The path carries the major version, and the `Hookline-Version` header pins a dated one, which [Versioning](./about/api-versioning.md) covers. If you have not sent an event yet, start with the [quick start](../getting-started/quick-start.md).
+The base URL is `https://api.hookline.example/v2`. Every request needs a bearer key in the `Authorization` header, issued in the dashboard and scoped to one account, which [Authentication](./about/authentication.md) covers. The path carries the major version, and the `Hookline-Version` header pins a dated one, which [Versioning](./about/api-versioning.md) covers. If you have not sent an event yet, start with the [Quickstart](../getting-started/quick-start.md).

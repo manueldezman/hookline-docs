@@ -86,5 +86,5 @@ Every error carries `code`, `status`, and `requestId`. See [Errors and status co
 
 ## Related
 
-- [Quick start](../getting-started/quick-start.md)
+- [Quickstart](../getting-started/quick-start.md)
 - [Create an event](../api/events/create.md)

@@ -87,5 +87,5 @@ See [Errors and status codes](../api/about/api-errors.md).
 
 ## Related
 
-- [Quick start](../getting-started/quick-start.md)
+- [Quickstart](../getting-started/quick-start.md)
 - [Create an event](../api/events/create.md)
