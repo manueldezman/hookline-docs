@@ -18,30 +18,7 @@ Every content change passes through automated gates before it reaches the publis
 | Agent-file parity | `validate-agent-files.js` and Node tests | Pull request and deploy | Any missing or broken agent file blocks the merge and the deploy |
 | External links | Lychee | Push to `main` and weekly | Any dead URL fails the run. It doesn't block merges |
 
-## How I structured the docs
-
-The docs split into four areas. Getting started, Guides, API reference and SDK each answer a different question.
-
-| Area | The question it answers |
-| --- | --- |
-| Getting started | What do I do first? |
-| Guides | How do I complete this task? |
-| API reference | What are the exact fields and methods? |
-| SDK | How do I call this from code? |
-
-`Changelog` and `Support` stay in the header as actions rather than sections.
-
-![The docs hierarchy, four areas splitting into topics, with the generated API reference shaded](./assets/docs-ia.png)
-
-*Each area splits into topics. The shaded pages under Reference are generated from `openapi/hookline.yaml`.*
-
-### Information architecture decisions I made
-
-- **Audience first framing.** The "Who is Hookline for?" section names four readers: Backend developers, Platform engineers, Operations engineers and security teams.
-- **3 max levels of depth.** Reference > Events > Create an event is the deepest path on the site. Getting started and Guides stop at two.
-- **Navigation organized by the user's job.** The API has an events resource, and there is no Events entry in the header. Sending an event belongs to the Quickstart, verifying its signature belongs to Guides, and the endpoint itself belongs to Reference.
-
-## What each tool demonstrates
+## What each tool catches
 
 I picked each tool to catch one specific failure.
 
@@ -176,6 +153,29 @@ pnpm add @hookline/sdk
 3. It appears in both `llms.txt` and `llms-full.txt`.
 4. The twin contains no leaked MDX (`<Tabs>`, `import` lines, or placeholders). Code samples are excluded from this check, because `import` is legitimate inside them.
 5. Every link in the twin that points at this site resolves to a real file.
+
+## How I structured the docs
+
+The docs split into four areas. Getting started, Guides, API reference and SDK each answer a different question.
+
+| Area | The question it answers |
+| --- | --- |
+| Getting started | What do I do first? |
+| Guides | How do I complete this task? |
+| API reference | What are the exact fields and methods? |
+| SDK | How do I call this from code? |
+
+`Changelog` and `Support` stay in the header as actions rather than sections.
+
+![The docs hierarchy, four areas splitting into topics, with the generated API reference shaded](./assets/docs-ia.png)
+
+*Each area splits into topics. The shaded pages under Reference are generated from `openapi/hookline.yaml`.*
+
+### Information architecture decisions I made
+
+- **Audience first framing.** The "Who is Hookline for?" section names four readers: Backend developers, Platform engineers, Operations engineers and security teams.
+- **3 max levels of depth.** Reference > Events > Create an event is the deepest path on the site. Getting started and Guides stop at two.
+- **Navigation organized by the user's job.** The API has an events resource, and there is no Events entry in the header. Sending an event belongs to the Quickstart, verifying its signature belongs to Guides, and the endpoint itself belongs to Reference.
 
 ## Run it locally
 
