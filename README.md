@@ -33,15 +33,17 @@ The site splits into four areas, and each area carries the same name in the head
 
 `Changelog` and `Support` stay in the header as actions rather than sections. Changelog is a single page with no sidebar of its own, and Support is a `mailto:` link, so neither belongs in the hierarchy.
 
-### Decisions behind the hierarchy
+### Why the structure looks like this
 
-- **The build fails when the structure drifts.** `sidebars.ts` is typed, so a sidebar entry pointing at a deleted page fails the build. Front matter is a gate, the build fails on any broken internal link, and `npm run check:api` fails when a generated page drifts from the OpenAPI spec.
-- **Concepts sit apart from reference.** `About API` explains behavior and `Reference` lists fields and methods. The eight concept pages are hand-written, the reference pages are generated from `openapi/hookline.yaml`, and the diagram shades the generated half. Mixing the two is what makes API docs hard to navigate.
-- **Every method page has the same shape.** Path parameters, request body, request examples in curl, Node.js and Python, then responses grouped by status code. A reader who has read one page has read them all.
-- **Troubleshooting belongs to the question that raises it.** The status code lookup lives in the API area, the failed-delivery walkthrough lives in Guides, and short versions sit inline on the pages that need them. Neither page is a dumping ground for the other.
-- **Depth stops at three levels.** Area, topic, page. Each area also has its own sidebar, so a reader in Guides never sees API navigation.
-- **Search is a fourth path through the same hierarchy.** The index is local and client-side, built from the docs only, with term highlighting on the target page and a keyboard shortcut. A query with no results is a dead end unless it offers a next step, so `src/clientModules/searchEmptyState.js` appends a hint and a link back to Getting started. The plugin renders its dropdown as an HTML string, which is why that patch reaches it through the DOM. The results page it links to stays outside the four areas and outside the agent output, because it is a lookup tool.
-- **The landing page owns the root.** `docs/index.md` is the overview at `/docs/`, and `/` is a redirect route rather than a static redirect, because the theme links to the home page from the navbar logo and the 404 page.
+I sorted the four areas with Diátaxis, which splits documentation by what the reader is doing rather than by which part of the product it covers. Getting started is the tutorial, Guides are the how-to pages, and the API reference holds the reference, with the eight concept pages under About API carrying the explanation. The landing page sits above all four as the overview at `/docs/`, and `/` redirects to it.
+
+The audience came first. Every page assumes a developer wiring up an integration who has already chosen Hookline, so none of it re-sells the product. Guides open with a job and a result you can check. Reference pages open with the method and the path.
+
+- **I organized the navigation by the reader's job, not by the product surface.** The API has an events resource, and there is no Events entry in the header. Sending an event belongs to the Quickstart, verifying its signature belongs to Guides, and the endpoint itself belongs to Reference. A reader asking how to send one and a reader asking which fields it takes land in different places.
+- **SDK is the deliberate exception.** It groups by tool rather than by task, because a reader who has chosen Node.js wants install, events and errors on one page. The other three areas split the same content by the moment it is needed.
+- **Depth stops at three levels.** Reference > Events > Create an event is the deepest path on the site. Getting started and Guides stop at two.
+- **The config enforces the shape.** `sidebars.ts` is typed, so a sidebar entry pointing at a deleted page fails the build. Front matter is a gate, the build fails on any broken internal link, and `npm run check:api` fails when a generated page drifts from the OpenAPI spec.
+- **Search is the fourth route.** The index is local and client-side, built from the docs only, with term highlighting on the target page and a keyboard shortcut. A query with no results is a dead end unless it offers a next step, so `src/clientModules/searchEmptyState.js` appends a hint and a link back to Getting started. The plugin renders its dropdown as an HTML string, which is why that patch reaches it through the DOM. The results page it links to stays outside the four areas and outside the agent output, because it is a lookup tool.
 
 ## What each tool demonstrates
 
