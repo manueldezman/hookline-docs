@@ -20,6 +20,17 @@ Every content change passes through automated gates before it reaches the publis
 
 ## How the docs are organized
 
+### Who is Hookline for?
+
+The docs serve four readers, each with a different question.
+
+- **Backend developers** send their first event and then look up the exact fields for a call.
+- **Platform engineers** decide how Hookline fits the delivery system they already run and which API version to pin.
+- **Operations engineers** open the delivery log when an event fails or never arrives.
+- **Security teams** check how signatures are verified and how a signing secret rotates.
+
+### The four areas
+
 The site splits into four areas, and each area carries the same name in the header nav, the sidebar, the URL and the folder under `docs/`. A reader who learns one name can predict the other three.
 
 ![The docs hierarchy, four areas splitting into topics, with the generated API reference shaded](./assets/docs-ia.png)
@@ -33,14 +44,13 @@ The site splits into four areas, and each area carries the same name in the head
 
 `Changelog` and `Support` stay in the header as actions rather than sections. Changelog is a single page with no sidebar of its own, and Support is a `mailto:` link, so neither belongs in the hierarchy.
 
-### Why the structure looks like this
+### How that becomes navigation
 
-I sorted the four areas with Diátaxis, which splits documentation by what the reader is doing rather than by which part of the product it covers. Getting started is the tutorial, Guides are the how-to pages, and the API reference holds the reference, with the eight concept pages under About API carrying the explanation. The landing page sits above all four as the overview at `/docs/`, and `/` redirects to it.
+Those jobs decide where a page lives. The API has an events resource, and there is no Events entry in the header. Sending an event belongs to the Quickstart, verifying its signature belongs to Guides, and the endpoint itself belongs to Reference.
 
-The audience came first. Every page assumes a developer wiring up an integration who has already chosen Hookline, so none of it re-sells the product. Guides open with a job and a result you can check. Reference pages open with the method and the path.
+The split follows Diátaxis. Getting started is the tutorial, Guides are the how-to pages, and the API reference holds the reference, with the eight concept pages under About API carrying the explanation. The landing page sits above all four at `/docs/`, and `/` redirects to it.
 
-- **I organized the navigation by the reader's job, not by the product surface.** The API has an events resource, and there is no Events entry in the header. Sending an event belongs to the Quickstart, verifying its signature belongs to Guides, and the endpoint itself belongs to Reference. A reader asking how to send one and a reader asking which fields it takes land in different places.
-- **SDK is the deliberate exception.** It groups by tool rather than by task, because a reader who has chosen Node.js wants install, events and errors on one page. The other three areas split the same content by the moment it is needed.
+- **SDK is the deliberate exception.** It groups by tool rather than by task, because a reader who has chosen Node.js wants install, events and errors on one page.
 - **Depth stops at three levels.** Reference > Events > Create an event is the deepest path on the site. Getting started and Guides stop at two.
 - **The config enforces the shape.** `sidebars.ts` is typed, so a sidebar entry pointing at a deleted page fails the build. Front matter is a gate, the build fails on any broken internal link, and `npm run check:api` fails when a generated page drifts from the OpenAPI spec.
 - **Search is the fourth route.** The index is local and client-side, built from the docs only, with term highlighting on the target page and a keyboard shortcut. A query with no results is a dead end unless it offers a next step, so `src/clientModules/searchEmptyState.js` appends a hint and a link back to Getting started. The plugin renders its dropdown as an HTML string, which is why that patch reaches it through the DOM. The results page it links to stays outside the four areas and outside the agent output, because it is a lookup tool.
