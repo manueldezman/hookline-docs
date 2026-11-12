@@ -18,11 +18,9 @@ Every content change passes through automated gates before it reaches the publis
 | Agent-file parity | `validate-agent-files.js` and Node tests | Pull request and deploy | Any missing or broken agent file blocks the merge and the deploy |
 | External links | Lychee | Push to `main` and weekly | Any dead URL fails the run. It doesn't block merges |
 
-## How the docs are organized
+## How I structured the docs
 
-The site splits into four areas, and each area carries the same name in the header nav, the sidebar, the URL and the folder under `docs/`. A reader who learns one name can predict the other three.
-
-![The docs hierarchy, four areas splitting into topics, with the generated API reference shaded](./assets/docs-ia.png)
+The docs split into four areas. Getting started, Guides, API reference and SDK each answer a different question.
 
 | Area | The question it answers |
 | --- | --- |
@@ -31,9 +29,11 @@ The site splits into four areas, and each area carries the same name in the head
 | API reference | What are the exact fields and methods? |
 | SDK | How do I call this from code? |
 
-`Changelog` and `Support` stay in the header as actions rather than sections. Changelog is a single page with no sidebar of its own, and Support is a `mailto:` link, so neither belongs in the hierarchy.
+`Changelog` and `Support` stay in the header as actions rather than sections.
 
-### Information architecture decisions I made
+![The docs hierarchy, four areas splitting into topics, with the generated API reference shaded](./assets/docs-ia.png)
+
+*Each area splits into topics. The shaded pages under Reference are generated from `openapi/hookline.yaml`.*
 
 I organized the pages with Diátaxis, which separates explanation from task guides and from reference. Getting started is the tutorial, the eight pages under About API explain how the API behaves, Guides walk one job from start to a result, and Reference lists the fields and methods for each call.
 
