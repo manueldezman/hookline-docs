@@ -20,17 +20,6 @@ Every content change passes through automated gates before it reaches the publis
 
 ## How the docs are organized
 
-### Who is Hookline for?
-
-The docs serve four readers, each with a different question.
-
-- **Backend developers** send their first event and then look up the exact fields for a call.
-- **Platform engineers** decide how Hookline fits the delivery system they already run and which API version to pin.
-- **Operations engineers** open the delivery log when an event fails or never arrives.
-- **Security teams** check how signatures are verified and how a signing secret rotates.
-
-### The four areas
-
 The site splits into four areas, and each area carries the same name in the header nav, the sidebar, the URL and the folder under `docs/`. A reader who learns one name can predict the other three.
 
 ![The docs hierarchy, four areas splitting into topics, with the generated API reference shaded](./assets/docs-ia.png)
@@ -44,16 +33,13 @@ The site splits into four areas, and each area carries the same name in the head
 
 `Changelog` and `Support` stay in the header as actions rather than sections. Changelog is a single page with no sidebar of its own, and Support is a `mailto:` link, so neither belongs in the hierarchy.
 
-### How that becomes navigation
+### Information architecture decisions I made
 
-Those jobs decide where a page lives. The API has an events resource, and there is no Events entry in the header. Sending an event belongs to the Quickstart, verifying its signature belongs to Guides, and the endpoint itself belongs to Reference.
+I organized the pages with Diátaxis, which separates explanation from task guides and from reference. Getting started is the tutorial, the eight pages under About API explain how the API behaves, Guides walk one job from start to a result, and Reference lists the fields and methods for each call.
 
-The split follows Diátaxis. Getting started is the tutorial, Guides are the how-to pages, and the API reference holds the reference, with the eight concept pages under About API carrying the explanation. The landing page sits above all four at `/docs/`, and `/` redirects to it.
-
-- **SDK is the deliberate exception.** It groups by tool rather than by task, because a reader who has chosen Node.js wants install, events and errors on one page.
-- **Depth stops at three levels.** Reference > Events > Create an event is the deepest path on the site. Getting started and Guides stop at two.
-- **The config enforces the shape.** `sidebars.ts` is typed, so a sidebar entry pointing at a deleted page fails the build. Front matter is a gate, the build fails on any broken internal link, and `npm run check:api` fails when a generated page drifts from the OpenAPI spec.
-- **Search is the fourth route.** The index is local and client-side, built from the docs only, with term highlighting on the target page and a keyboard shortcut. A query with no results is a dead end unless it offers a next step, so `src/clientModules/searchEmptyState.js` appends a hint and a link back to Getting started. The plugin renders its dropdown as an HTML string, which is why that patch reaches it through the DOM. The results page it links to stays outside the four areas and outside the agent output, because it is a lookup tool.
+- **Audience first framing.** The "Who is Hookline for?" section names four readers: Backend developers, Platform engineers, Operations engineers and security teams.
+- **3 max levels of depth.** Reference > Events > Create an event is the deepest path on the site. Getting started and Guides stop at two.
+- **Navigation organized by the user's job.** The API has an events resource, and there is no Events entry in the header. Sending an event belongs to the Quickstart, verifying its signature belongs to Guides, and the endpoint itself belongs to Reference.
 
 ## What each tool demonstrates
 
