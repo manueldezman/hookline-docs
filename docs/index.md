@@ -1,5 +1,5 @@
 ---
-title: Welcome to Hookline docs
+title: Overview
 description: Hookline is a webhook delivery service for teams that need events to arrive reliably.
 slug: /
 sidebar_position: 0
@@ -7,7 +7,7 @@ sidebar_position: 0
 
 import SectionCards, {SectionCard} from '@site/src/components/SectionCards';
 
-# Welcome to Hookline docs
+# Overview
 
 ## What is Hookline?
 
@@ -33,7 +33,7 @@ Start with the outcome that matches your goal.
 <SectionCard title="Get started" description="Install the CLI, send your first event, and see it arrive." image="/img/cards/get-started.svg" to="/docs/getting-started/">
 
 - [Install the CLI](/docs/getting-started/installation)
-- [Quick start](/docs/getting-started/quick-start)
+- [Quickstart](/docs/getting-started/quick-start)
 - [Authentication](/docs/api/about/authentication)
 
 </SectionCard>

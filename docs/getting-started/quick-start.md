@@ -1,5 +1,5 @@
 ---
-title: Quick start
+title: Quickstart
 description: Send your first Hookline event in about two minutes, with curl or the Hookline CLI.
 sidebar_position: 2
 displayed_sidebar: homeSidebar
@@ -8,7 +8,7 @@ displayed_sidebar: homeSidebar
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Quick start
+# Quickstart
 
 Send one event and confirm Hookline accepted it. Pick the path that matches how you want to work. Both take about two minutes.
 

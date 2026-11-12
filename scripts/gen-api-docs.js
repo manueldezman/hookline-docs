@@ -487,7 +487,7 @@ function rootPage(tags) {
     ),
   );
   content.push('');
-  content.push(`The base URL is \`${spec.servers[0].url}\`. Every request needs a bearer key in the \`Authorization\` header, issued in the dashboard and scoped to one account, which [Authentication](./about/authentication.md) covers. The path carries the major version, and the \`Hookline-Version\` header pins a dated one, which [Versioning](./about/api-versioning.md) covers. If you have not sent an event yet, start with the [quick start](../getting-started/quick-start.md).`);
+  content.push(`The base URL is \`${spec.servers[0].url}\`. Every request needs a bearer key in the \`Authorization\` header, issued in the dashboard and scoped to one account, which [Authentication](./about/authentication.md) covers. The path carries the major version, and the \`Hookline-Version\` header pins a dated one, which [Versioning](./about/api-versioning.md) covers. If you have not sent an event yet, start with the [Quickstart](../getting-started/quick-start.md).`);
   content.push('');
   emit('index.md', content.join('\n'));
 }
