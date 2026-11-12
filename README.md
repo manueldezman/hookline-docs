@@ -35,7 +35,7 @@ The docs split into four areas. Getting started, Guides, API reference and SDK e
 
 *Each area splits into topics. The shaded pages under Reference are generated from `openapi/hookline.yaml`.*
 
-I organized the pages with Diátaxis, which separates explanation from task guides and from reference. Getting started is the tutorial, the eight pages under About API explain how the API behaves, Guides walk one job from start to a result, and Reference lists the fields and methods for each call.
+### Information architecture decisions I made
 
 - **Audience first framing.** The "Who is Hookline for?" section names four readers: Backend developers, Platform engineers, Operations engineers and security teams.
 - **3 max levels of depth.** Reference > Events > Create an event is the deepest path on the site. Getting started and Guides stop at two.
