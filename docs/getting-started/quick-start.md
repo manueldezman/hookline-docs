@@ -3,6 +3,10 @@ title: Quickstart
 description: Send your first Hookline event in about two minutes, with curl or the Hookline CLI.
 sidebar_position: 2
 displayed_sidebar: homeSidebar
+depends_on:
+  - bin/hookline.js
+  - src/routes/events.js
+  - src/routes/internal.js
 ---
 
 import Tabs from '@theme/Tabs';

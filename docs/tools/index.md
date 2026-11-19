@@ -3,6 +3,8 @@ title: SDKs
 description: Choose the SDK that fits your workflow and get started with Hookline quickly.
 sidebar_position: 1
 displayed_sidebar: toolsSidebar
+depends_on:
+  - bin/hookline.js
 ---
 
 import SectionCards, {SectionCard} from '@site/src/components/SectionCards';

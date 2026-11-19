@@ -3,6 +3,10 @@ title: Rate limits
 description: Request limits per plan, the headers that report your remaining quota, and how to back off when you hit a 429.
 sidebar_position: 8
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/rate-limit.js
+  - src/app.js
+  - src/config.js
 ---
 
 # Rate limits

@@ -3,6 +3,7 @@ title: Node.js SDK
 description: Install the Hookline Node.js SDK, create events and endpoints, and verify signatures with the bundled helper.
 sidebar_position: 1
 displayed_sidebar: toolsSidebar
+depends_on: []
 ---
 
 # Node.js SDK

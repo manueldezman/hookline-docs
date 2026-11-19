@@ -3,6 +3,8 @@ title: Rotate a signing secret
 description: Replace an endpoint secret without dropping deliveries, using the two-secret window Hookline provides.
 sidebar_position: 3
 displayed_sidebar: guidesSidebar
+depends_on:
+  - src/delivery/signature.js
 ---
 
 # Rotate a signing secret

@@ -5,6 +5,10 @@ sidebar_label: Delete endpoint
 sidebar_custom_props: {method: DELETE}
 sidebar_position: 5
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/routes/endpoints.js
+  - src/store.js
+  - src/delivery/status.js
 ---
 
 import Endpoint from '@site/src/components/Endpoint';

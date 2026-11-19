@@ -3,6 +3,10 @@ title: Deliveries
 description: "A delivery is one event going to one endpoint. Hookline records each attempt for thirty days, and you can query or replay it."
 sidebar_position: 4
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/routes/deliveries.js
+  - src/delivery/worker.js
+  - src/store.js
 ---
 
 # Deliveries

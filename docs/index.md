@@ -3,6 +3,7 @@ title: Overview
 description: Hookline is a webhook delivery service for teams that need events to arrive reliably.
 slug: /
 sidebar_position: 0
+depends_on: []
 ---
 
 import SectionCards, {SectionCard} from '@site/src/components/SectionCards';

@@ -5,6 +5,10 @@ sidebar_label: List deliveries
 sidebar_custom_props: {method: GET}
 sidebar_position: 2
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/routes/deliveries.js
+  - src/pagination.js
+  - src/store.js
 ---
 
 import Endpoint from '@site/src/components/Endpoint';

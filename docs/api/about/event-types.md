@@ -3,6 +3,9 @@ title: Event types
 description: The full catalog of Hookline event types, with the fields each payload carries and the types subscribers can filter on.
 sidebar_position: 2
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/events/catalog.js
+  - src/events/create.js
 ---
 
 # Event types

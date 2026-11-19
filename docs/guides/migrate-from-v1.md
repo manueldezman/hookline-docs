@@ -3,6 +3,10 @@ title: Migrate from v1
 description: Move an integration from the original v1 API to the current version, with the field, header, and retry changes that matter.
 sidebar_position: 4
 displayed_sidebar: guidesSidebar
+depends_on:
+  - src/config.js
+  - src/delivery/worker.js
+  - src/delivery/signature.js
 ---
 
 # Migrate from v1

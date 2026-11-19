@@ -3,6 +3,9 @@ title: Install the CLI
 description: Install the Hookline CLI on macOS, Linux, or Windows, sign in with a test key, and confirm the binary runs.
 sidebar_position: 1
 displayed_sidebar: homeSidebar
+depends_on:
+  - bin/hookline.js
+  - package.json
 ---
 
 import Tabs from '@theme/Tabs';

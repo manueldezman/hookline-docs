@@ -3,6 +3,7 @@ title: Guides
 description: Task-focused walkthroughs that combine API calls, dashboard changes, and receiver code into one working result.
 sidebar_position: 1
 displayed_sidebar: guidesSidebar
+depends_on: []
 ---
 
 import SectionCards, {SectionCard} from '@site/src/components/SectionCards';

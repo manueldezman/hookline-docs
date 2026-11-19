@@ -3,6 +3,7 @@ title: Delivery IP addresses
 description: The addresses Hookline delivers from, how often they change, and how to allow them through a firewall.
 sidebar_position: 6
 displayed_sidebar: apiSidebar
+depends_on: []
 ---
 
 # Delivery IP addresses

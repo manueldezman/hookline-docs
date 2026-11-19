@@ -3,6 +3,10 @@ title: Endpoints
 description: "An endpoint is a URL that receives events. Each one has its own signing secret and its own list of subscribed types."
 sidebar_position: 3
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/routes/endpoints.js
+  - src/http/verifier.js
+  - src/store.js
 ---
 
 # Endpoints

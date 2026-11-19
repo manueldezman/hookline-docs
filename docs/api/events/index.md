@@ -3,6 +3,10 @@ title: Events
 description: "An event records something that happened. Hookline queues it and delivers it to every endpoint subscribed to its type."
 sidebar_position: 2
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/routes/events.js
+  - src/events/create.js
+  - src/events/catalog.js
 ---
 
 # Events

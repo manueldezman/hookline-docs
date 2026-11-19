@@ -5,6 +5,9 @@ sidebar_label: Replay delivery
 sidebar_custom_props: {method: POST}
 sidebar_position: 4
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/routes/deliveries.js
+  - src/store.js
 ---
 
 import Endpoint from '@site/src/components/Endpoint';

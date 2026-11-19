@@ -5,6 +5,11 @@ sidebar_label: Create event
 sidebar_custom_props: {method: POST}
 sidebar_position: 2
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/routes/events.js
+  - src/events/create.js
+  - src/events/catalog.js
+  - src/validate.js
 ---
 
 import Endpoint from '@site/src/components/Endpoint';

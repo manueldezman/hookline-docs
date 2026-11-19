@@ -3,6 +3,8 @@ title: Account
 description: "The account object reports the API version your requests use by default."
 sidebar_position: 5
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/routes/account.js
 ---
 
 # Account

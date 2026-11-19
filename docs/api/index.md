@@ -3,6 +3,13 @@ title: API reference
 description: Every Hookline API resource, its object schema, and the methods you can call.
 sidebar_position: 50
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/app.js
+  - src/config.js
+  - src/routes/events.js
+  - src/routes/endpoints.js
+  - src/routes/deliveries.js
+  - src/routes/account.js
 ---
 
 import TopicCards from '@site/src/components/TopicCards';

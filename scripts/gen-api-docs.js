@@ -33,6 +33,56 @@ const RESOURCE_SCHEMA = {
 };
 
 /**
+ * Product files each generated page describes. The `depends_on` front matter
+ * lets the docs keep a link to the code, so a change to one of these files
+ * points a reviewer at the page that must change with it.
+ */
+const TAG_FILES = {
+  Events: ['src/routes/events.js', 'src/events/create.js', 'src/events/catalog.js'],
+  Endpoints: ['src/routes/endpoints.js', 'src/http/verifier.js', 'src/store.js'],
+  Deliveries: ['src/routes/deliveries.js', 'src/delivery/worker.js', 'src/store.js'],
+  Account: ['src/routes/account.js'],
+};
+
+const OPERATION_FILES = {
+  createEvent: [
+    'src/routes/events.js',
+    'src/events/create.js',
+    'src/events/catalog.js',
+    'src/validate.js',
+  ],
+  retrieveEvent: ['src/routes/events.js', 'src/store.js'],
+  listEndpoints: ['src/routes/endpoints.js', 'src/pagination.js', 'src/store.js'],
+  createEndpoint: [
+    'src/routes/endpoints.js',
+    'src/http/verifier.js',
+    'src/ids.js',
+    'src/validate.js',
+  ],
+  updateEndpoint: ['src/routes/endpoints.js', 'src/http/verifier.js', 'src/validate.js'],
+  deleteEndpoint: ['src/routes/endpoints.js', 'src/store.js', 'src/delivery/status.js'],
+  listDeliveries: ['src/routes/deliveries.js', 'src/pagination.js', 'src/store.js'],
+  retrieveDelivery: ['src/routes/deliveries.js', 'src/store.js'],
+  replayDelivery: ['src/routes/deliveries.js', 'src/store.js'],
+  replayRange: ['src/routes/deliveries.js', 'src/store.js'],
+  retrieveAccount: ['src/routes/account.js'],
+};
+
+const API_INDEX_FILES = [
+  'src/app.js',
+  'src/config.js',
+  'src/routes/events.js',
+  'src/routes/endpoints.js',
+  'src/routes/deliveries.js',
+  'src/routes/account.js',
+];
+
+function dependsOnLines(files) {
+  if (!files || files.length === 0) return ['depends_on: []'];
+  return ['depends_on:', ...files.map((file) => `  - ${file}`)];
+}
+
+/**
  * Concept pages live in docs/api/about/ and are hand-maintained. They are not
  * emitted by this script, so the stale-file cleanup below has to leave them
  * alone. The cards below are the only generated reference to them.
@@ -291,6 +341,7 @@ function methodPage(tagName, op, slug, position) {
   body.push(`sidebar_custom_props: {method: ${op.method.toUpperCase()}}`);
   body.push(`sidebar_position: ${position}`);
   body.push('displayed_sidebar: apiSidebar');
+  body.push(...dependsOnLines(OPERATION_FILES[op.operationId] || TAG_FILES[tagName]));
   body.push('---');
   body.push('');
   body.push("import Endpoint from '@site/src/components/Endpoint';");
@@ -401,6 +452,7 @@ function resourcePage(tag, folder, position, methods) {
   body.push(`description: ${JSON.stringify(clip(firstLine || title))}`);
   body.push(`sidebar_position: ${position}`);
   body.push('displayed_sidebar: apiSidebar');
+  body.push(...dependsOnLines(TAG_FILES[tag.name]));
   body.push('---');
   body.push('');
   body.push(`# ${title}`);
@@ -458,6 +510,7 @@ function rootPage(tags) {
   content.push('description: Every Hookline API resource, its object schema, and the methods you can call.');
   content.push('sidebar_position: 50');
   content.push('displayed_sidebar: apiSidebar');
+  content.push(...dependsOnLines(API_INDEX_FILES));
   content.push('---');
   content.push('');
   content.push("import TopicCards from '@site/src/components/TopicCards';");

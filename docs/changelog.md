@@ -2,6 +2,9 @@
 title: Changelog
 description: Every change to the Hookline API, the dashboard, and the delivery pipeline, newest first.
 sidebar_position: 7
+depends_on:
+  - src/config.js
+  - package.json
 ---
 
 # Changelog

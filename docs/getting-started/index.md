@@ -3,6 +3,9 @@ title: Get started
 description: Install the Hookline CLI, send your first event, and confirm it arrives on your machine.
 sidebar_position: 1
 displayed_sidebar: homeSidebar
+depends_on:
+  - bin/hookline.js
+  - src/server.js
 ---
 
 import SectionCards, {SectionCard} from '@site/src/components/SectionCards';
