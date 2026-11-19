@@ -5,6 +5,11 @@ sidebar_label: Create endpoint
 sidebar_custom_props: {method: POST}
 sidebar_position: 3
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/routes/endpoints.js
+  - src/http/verifier.js
+  - src/ids.js
+  - src/validate.js
 ---
 
 import Endpoint from '@site/src/components/Endpoint';

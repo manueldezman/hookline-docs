@@ -5,6 +5,10 @@ sidebar_label: Update endpoint
 sidebar_custom_props: {method: PATCH}
 sidebar_position: 4
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/routes/endpoints.js
+  - src/http/verifier.js
+  - src/validate.js
 ---
 
 import Endpoint from '@site/src/components/Endpoint';

@@ -3,6 +3,10 @@ title: Troubleshooting
 description: What to do for each error code the Hookline API returns, from a malformed body to a 503.
 sidebar_position: 60
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/errors.js
+  - src/http/verifier.js
+  - src/delivery/worker.js
 ---
 
 # Troubleshooting

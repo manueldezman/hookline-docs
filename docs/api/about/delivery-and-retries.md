@@ -3,6 +3,12 @@ title: Delivery and retries
 description: How Hookline delivers events, what counts as a failure, and why the same event can arrive more than once.
 sidebar_position: 3
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/delivery/worker.js
+  - src/delivery/signature.js
+  - src/delivery/status.js
+  - src/http/sender.js
+  - src/config.js
 ---
 
 # Delivery and retries

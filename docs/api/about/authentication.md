@@ -3,6 +3,10 @@ title: Authentication
 description: Authenticate Hookline API requests with bearer API keys, and learn the difference between test and live keys.
 sidebar_position: 1
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/app.js
+  - src/ids.js
+  - src/store.js
 ---
 
 # Authentication

@@ -3,6 +3,9 @@ title: Versioning
 description: How Hookline versions the API, how to pin a version, and what to do when a version reaches end of life.
 sidebar_position: 4
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/config.js
+  - src/app.js
 ---
 
 # Versioning

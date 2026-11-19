@@ -3,6 +3,9 @@ title: Verify signatures
 description: Verify the HMAC signature on every Hookline webhook so your receiver only accepts events that Hookline sent.
 sidebar_position: 1
 displayed_sidebar: guidesSidebar
+depends_on:
+  - src/delivery/signature.js
+  - src/http/sender.js
 ---
 
 import Tabs from '@theme/Tabs';

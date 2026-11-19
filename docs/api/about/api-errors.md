@@ -3,6 +3,11 @@ title: Errors and status codes
 description: Every status code the Hookline API returns, the error object shape, and which failures you can retry safely.
 sidebar_position: 5
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/errors.js
+  - src/app.js
+  - src/validate.js
+  - src/http/verifier.js
 ---
 
 # Errors and status codes

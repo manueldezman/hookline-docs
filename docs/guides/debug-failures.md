@@ -3,6 +3,10 @@ title: Debug a failed delivery
 description: Work through the usual causes of a missing or failing delivery, from DNS and TLS to a handler that returns the wrong status.
 sidebar_position: 2
 displayed_sidebar: guidesSidebar
+depends_on:
+  - src/delivery/worker.js
+  - src/store.js
+  - src/routes/deliveries.js
 ---
 
 # Debug a failed delivery

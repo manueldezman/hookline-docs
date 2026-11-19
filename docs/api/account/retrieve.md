@@ -5,6 +5,8 @@ sidebar_label: Retrieve account
 sidebar_custom_props: {method: GET}
 sidebar_position: 2
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/routes/account.js
 ---
 
 import Endpoint from '@site/src/components/Endpoint';

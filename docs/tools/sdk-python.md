@@ -3,6 +3,7 @@ title: Python SDK
 description: Install the Hookline Python SDK, create events and endpoints, and verify signatures with the bundled helper.
 sidebar_position: 2
 displayed_sidebar: toolsSidebar
+depends_on: []
 ---
 
 # Python SDK

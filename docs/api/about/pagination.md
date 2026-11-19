@@ -3,6 +3,9 @@ title: Pagination
 description: Page through list endpoints with cursors, choose a page size, and know when you have reached the last page.
 sidebar_position: 7
 displayed_sidebar: apiSidebar
+depends_on:
+  - src/pagination.js
+  - src/store.js
 ---
 
 # Pagination
