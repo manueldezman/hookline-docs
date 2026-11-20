@@ -29,7 +29,7 @@ Teams that send events to other systems and need to confirm that each request re
 
 Start with the outcome that matches your goal.
 
-<SectionCards className="gridGuideLayout">
+<SectionCards className="gridFour">
 
 <SectionCard title="Get started" description="Install the CLI, send your first event, and see it arrive." image="/img/cards/get-started.svg" to="/docs/getting-started/">
 
