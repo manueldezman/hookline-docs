@@ -31,36 +31,12 @@ Start with the outcome that matches your goal.
 
 <SectionCards className="gridFour">
 
-<SectionCard title="Get started" description="Install the CLI, send your first event, and see it arrive." image="/img/cards/get-started.svg" to="/docs/getting-started/">
+<SectionCard title="Get started" description="Install the CLI, send your first event, and see it arrive." image="/img/cards/get-started.svg" to="/docs/getting-started/" wholeCard />
 
-- [Install the CLI](/docs/getting-started/installation)
-- [Quickstart](/docs/getting-started/quick-start)
-- [Authentication](/docs/api/about/authentication)
+<SectionCard title="Follow a guide" description="Work through the tasks that matter most to your integration." image="/img/cards/follow-a-guide.svg" to="/docs/guides" wholeCard />
 
-</SectionCard>
+<SectionCard title="Look up the API" description="Search the resources, methods, and fields you need." image="/img/cards/look-up-the-api.svg" to="/docs/api/" wholeCard />
 
-<SectionCard title="Follow a guide" description="Work through the tasks that matter most to your integration." image="/img/cards/follow-a-guide.svg" to="/docs/guides">
-
-- [Verify signatures](/docs/guides/verifying-signatures)
-- [Debug a failed delivery](/docs/guides/debug-failures)
-- [Rotate a signing secret](/docs/guides/signature-rotation)
-- [Migrate from v1](/docs/guides/migrate-from-v1)
-
-</SectionCard>
-
-<SectionCard title="Look up the API" description="Search the resources, methods, and fields you need." image="/img/cards/look-up-the-api.svg" to="/docs/api/">
-
-- [Events](/docs/api/events/)
-- [Endpoints](/docs/api/endpoints/)
-- [Deliveries](/docs/api/deliveries/)
-
-</SectionCard>
-
-<SectionCard title="Use an SDK" description="Send events from your own code with a typed client." image="/img/cards/sdk.svg" to="/docs/tools/">
-
-- [Node.js SDK](/docs/tools/sdk-node)
-- [Python SDK](/docs/tools/sdk-python)
-
-</SectionCard>
+<SectionCard title="Use an SDK" description="Send events from your own code with a typed client." image="/img/cards/sdk.svg" to="/docs/tools/" wholeCard />
 
 </SectionCards>

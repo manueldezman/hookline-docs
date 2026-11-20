@@ -12,12 +12,15 @@
   border: 1px solid var(--ifm-color-emphasis-200);
   border-radius: 16px;
   background: var(--ifm-background-surface-color);
+  color: inherit;
+  text-decoration: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .card:hover {
   border-color: var(--ifm-color-primary);
   box-shadow: var(--ifm-global-shadow-md);
+  text-decoration: none;
   transform: translateY(-2px);
 }
 
@@ -136,12 +139,15 @@
   border: 1px solid var(--ifm-color-emphasis-200);
   border-radius: 16px;
   background: var(--ifm-background-surface-color);
+  color: inherit;
+  text-decoration: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .card:hover {
   border-color: var(--ifm-color-primary);
   box-shadow: var(--ifm-global-shadow-md);
+  text-decoration: none;
   transform: translateY(-2px);
 }
 
