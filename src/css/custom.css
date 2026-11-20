@@ -31,6 +31,22 @@
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
 }
 
+.gridFour {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+@media (max-width: 1400px) {
+  .gridFour {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .gridFour {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 /* Support is a mailto, so it needs no external-link glyph. */
 .navAction[href^='mailto:'] svg,
 .footer a[href^='mailto:'] svg {

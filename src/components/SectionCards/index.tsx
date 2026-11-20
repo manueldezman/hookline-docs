@@ -8,25 +8,50 @@ type SectionCardProps = {
   description: string;
   image: string;
   to: string;
+  wholeCard?: boolean;
   children?: ReactNode;
 };
 
-export function SectionCard({title, description, image, to, children}: SectionCardProps) {
+export function SectionCard({title, description, image, to, wholeCard = false, children}: SectionCardProps) {
   const src = useBaseUrl(image);
 
-  return (
-    <article className={styles.card}>
-      <img className={styles.image} src={src} alt="" loading="lazy" />
-      <div className={styles.body}>
-        <Link className={styles.heading} to={to}>
-          <span className={styles.title}>{title}</span>
-          <span className={styles.arrow} aria-hidden="true" />
-        </Link>
-        <p className={styles.description}>{description}</p>
-        {children ? <div className={styles.links}>{children}</div> : null}
-      </div>
-    </article>
+  const titleContent = (
+    <>
+      <span className={styles.title}>{title}</span>
+      <span className={styles.arrow} aria-hidden="true" />
+    </>
   );
+
+  const body = (
+    <div className={styles.body}>
+      {wholeCard ? (
+        <div className={styles.heading}>{titleContent}</div>
+      ) : (
+        <Link className={styles.heading} to={to}>
+          {titleContent}
+        </Link>
+      )}
+      <p className={styles.description}>{description}</p>
+      {children ? <div className={styles.links}>{children}</div> : null}
+    </div>
+  );
+
+  const inner = (
+    <>
+      <img className={styles.image} src={src} alt="" loading="lazy" />
+      {body}
+    </>
+  );
+
+  if (wholeCard) {
+    return (
+      <Link className={styles.card} to={to}>
+        {inner}
+      </Link>
+    );
+  }
+
+  return <article className={styles.card}>{inner}</article>;
 }
 
 export default function SectionCards({children, className}: {children: ReactNode; className?: string}) {
