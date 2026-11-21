@@ -58,8 +58,8 @@ jobs:
       - run: npm run build
       - run: npm run validate
 
-  samples:
-    name: samples
+  examples:
+    name: examples
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -71,7 +71,7 @@ jobs:
       - name: Install the product
         working-directory: product-repo
         run: npm ci
-      - name: Run the docs samples
+      - name: Run the docs examples
         env:
           DOCS_REPO: ${{ github.workspace }}
-        run: node product-repo/scripts/check-docs-samples.mjs
+        run: node product-repo/scripts/check-docs-examples.mjs
