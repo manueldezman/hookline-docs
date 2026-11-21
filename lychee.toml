@@ -16,5 +16,6 @@ exclude = [
   # Your own site: these URLs don't exist until the first deploy finishes.
   # (?i) makes the match case-insensitive, because hosts get lowercased.
   '(?i)^https://manueldezman\.github\.io/',
-  '^https://api\.hookline\.example',
+  # The product is fictional. The .example TLD is reserved for documentation.
+  '^https?://[^/]*\.example(/|$)',
 ]
