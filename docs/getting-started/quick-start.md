@@ -28,7 +28,7 @@ export HOOKLINE_API_KEY=hl_test_replace_me
 ## 2. Send an event
 
 ```bash
-curl https://api.hookline.example/v2/events \
+curl https://api.hookline.example/v2/invalid \
   -H "Authorization: Bearer $HOOKLINE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"type":"invoice.paid","payload":{"invoiceId":"inv_1042","amount":4900,"currency":"USD"}}'
