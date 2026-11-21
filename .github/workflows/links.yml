@@ -1,7 +1,6 @@
 name: External links
 
 on:
-  pull_request:
   push:
     branches: [main]
   schedule:
