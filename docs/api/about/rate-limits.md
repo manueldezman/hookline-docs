@@ -17,7 +17,7 @@ The API accepts a fixed number of requests per minute, set by plan.
 
 | Plan | Events per minute | Reads per minute |
 | --- | --- | --- |
-| Free | 60 | 120 |
+| Free | 30 | 120 |
 | Team | 600 | 1,200 |
 | Business | 3,000 | 6,000 |
 
