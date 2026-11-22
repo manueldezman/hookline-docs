@@ -16,6 +16,8 @@ Hookline is a webhook delivery service. It takes the events your product generat
 
 Use Hookline when you need dependable webhooks without building your own queue, retry schedule, signing, and delivery tracking.
 
+Read the [event types reference](https://broken-link.invalid/event-types) for the full list.
+
 ## Who is Hookline for?
 
 Teams that send events to other systems and need to confirm that each request reaches the right endpoint.
