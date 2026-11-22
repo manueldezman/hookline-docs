@@ -31,3 +31,5 @@ Test keys deliver events to the CLI listener only. Use a live key to reach real 
 - Learn how [authentication](./authentication.md) works.
 - Read the [events reference](./sending-events-typo.md).
 - Protect receivers with [signature verification](./verifying-signatures.md).
+
+<!-- trigger checks -->
