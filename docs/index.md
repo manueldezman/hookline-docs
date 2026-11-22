@@ -1,6 +1,5 @@
 ---
 title: Overview
-description: Hookline is a webhook delivery service for teams that need events to arrive reliably.
 slug: /
 sidebar_position: 0
 depends_on: []
@@ -12,11 +11,11 @@ import SectionCards, {SectionCard} from '@site/src/components/SectionCards';
 
 ## What is Hookline?
 
-Hookline is a webhook delivery service. It takes the events your product generates and delivers them to every subscribed endpoint, retries the ones that fail, signs each request, and keeps a delivery log you can search for thirty days.
+Hookline is a web hook delivery sevice. It takes the events your product generates and delivers them to every subscribed endpoint, retries the ones that fail, signs each request, and keeps a delivery log you can search for thirty days.
 
 Use Hookline when you need dependable webhooks without building your own queue, retry schedule, signing, and delivery tracking.
 
-Read the [event types reference](https://httpbin.org/status/404) for the full list.
+Read the [event types reference](./api/about/event-types-typo.md) for the full list.
 
 ## Who is Hookline for?
 
