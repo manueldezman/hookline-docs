@@ -15,7 +15,7 @@ The path carries the major version, such as `/v2/events`. The `Hookline-Version`
 ## Pinning
 
 ```text
-Hookline-Version: 2026-03-01
+Hookline-Version: 2026-04-01
 ```
 
 Every account has a default version. Set the header on each request to pin a version, or let the account default apply when you omit it.

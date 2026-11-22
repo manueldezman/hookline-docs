@@ -27,9 +27,13 @@ Newest first. Each entry says what changed and whether you need to do anything.
 - **Six retries over 24 hours.** The schedule grew from four attempts to six, with the last two at 6 and 24 hours. See [Delivery and retries](./api/about/delivery-and-retries.md).
 - **Attempt header.** Every delivery now reports `Hookline-Attempt`, counted from 1.
 
+## 2026-04-01
+
+- **Version 2026-04-01.** New accounts default to this version. Pin it with the `Hookline-Version` header. See [Versioning](./api/about/api-versioning.md).
+
 ## 2026-03-01
 
-- **Version 2026-03-01.** New accounts default to this version. Pin it with the `Hookline-Version` header. See [Versioning](./api/about/api-versioning.md).
+- **Version 2026-03-01.** Pin it with the `Hookline-Version` header. See [Versioning](./api/about/api-versioning.md).
 - **Python SDK 2.0.** The SDK adds idempotency keys and a signature helper. See [Python SDK](./tools/sdk-python.md).
 
 ## 2026-02-10
