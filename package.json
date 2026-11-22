@@ -16,14 +16,21 @@
     "postbuild": "node scripts/agent-files.js build",
     "validate": "node scripts/validate-agent-files.js build",
     "test": "node --test \"scripts/**/*.test.js\"",
-    "check:frontmatter": "node scripts/check-frontmatter.js"
+    "check:frontmatter": "node scripts/check-frontmatter.js",
+    "gen:api": "node scripts/gen-api-docs.js",
+    "check:api": "node scripts/gen-api-docs.js --check",
+    "prebuild": "node scripts/gen-api-docs.js",
+    "prestart": "node scripts/gen-api-docs.js"
   },
   "dependencies": {
     "@docusaurus/core": "3.10.2",
     "@docusaurus/faster": "3.10.2",
     "@docusaurus/preset-classic": "3.10.2",
+    "@easyops-cn/docusaurus-search-local": "^0.55.3",
     "@mdx-js/react": "^3.0.0",
     "clsx": "^2.0.0",
+    "gray-matter": "^4.0.3",
+    "js-yaml": "^4.1.0",
     "prism-react-renderer": "^2.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
@@ -33,7 +40,6 @@
     "@docusaurus/tsconfig": "3.10.2",
     "@docusaurus/types": "3.10.2",
     "@types/react": "^19.0.0",
-    "gray-matter": "^4.0.3",
     "typescript": "~6.0.2"
   },
   "browserslist": {

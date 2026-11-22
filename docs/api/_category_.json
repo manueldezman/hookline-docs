@@ -1,0 +1,9 @@
+{
+  "label": "API reference",
+  "position": 5,
+  "collapsed": false,
+  "link": {
+    "type": "doc",
+    "id": "api/index"
+  }
+}

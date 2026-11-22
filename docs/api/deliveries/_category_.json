@@ -1,0 +1,8 @@
+{
+  "label": "Deliveries",
+  "position": 3,
+  "link": {
+    "type": "doc",
+    "id": "api/deliveries/index"
+  }
+}

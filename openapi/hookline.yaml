@@ -1,0 +1,975 @@
+openapi: 3.1.0
+
+info:
+  title: Hookline API
+  version: 2026-03-01
+  description: |
+    The Hookline API creates events and manages the endpoints that receive them.
+
+servers:
+  - url: https://api.hookline.example/v2
+    description: Production
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Events
+    description: |
+      An event records something that happened. Hookline queues it and delivers it to every endpoint subscribed to its type.
+
+      The account can send the event types listed on the [Event types](../about/event-types.md) page.
+    x-docs:
+      sections:
+        - title: What an event becomes
+          body: |
+            One event can produce several deliveries, one per subscribed endpoint. The event keeps its `id` across every delivery and every retry, which is what lets a receiver ignore a duplicate.
+
+  - name: Endpoints
+    description: |
+      An endpoint is a URL that receives events. Each one has its own signing secret and its own list of subscribed types.
+
+      Hookline checks a new URL before it accepts it. The URL must use HTTPS, resolve publicly, and answer a `HEAD` request with a `2xx`.
+    x-docs:
+      sections:
+        - title: Secrets
+          body: |
+            Hookline returns the `secret` field once, when it creates the endpoint. It never returns it again. If you lose it, start a rotation from the dashboard. Rotating keeps the old secret active until you finish, so Hookline does not reject any delivery during the switch.
+
+  - name: Deliveries
+    description: |
+      A delivery is one event going to one endpoint. Hookline records each attempt for thirty days, and you can query or replay it.
+    x-docs:
+      sections:
+        - title: What Hookline sends
+
+          body: |
+            Hookline sends a JSON POST to the endpoint URL. The body is the event envelope and the headers carry the signature.
+
+            | Header | Purpose |
+            | --- | --- |
+            | `Hookline-Event` | The event type, such as `invoice.paid` |
+            | `Hookline-Delivery` | Unique ID for this attempt, stable across retries |
+            | `Hookline-Signature` | Timestamp and HMAC signature |
+            | `Hookline-Attempt` | Attempt number, starting at 1 |
+            | `Content-Type` | Always `application/json` |
+
+            ```json
+            {
+              "id": "evt_8f2a91",
+              "type": "invoice.paid",
+              "created": "2026-03-04T10:12:44Z",
+              "data": {
+                "invoiceId": "inv_1042",
+                "amount": 4900,
+                "currency": "USD"
+              }
+            }
+            ```
+
+            Hookline caps bodies at 256 KB. Read the raw body, verify the signature, then parse. A body that your framework parsed and re-serialized does not match the signature.
+
+        - title: What counts as success
+
+          body: |
+            Any `2xx` returned within five seconds acknowledges a delivery. A timeout, a connection reset, a `3xx`, and every `4xx` and `5xx` count as failures. Hookline does not follow redirects.
+
+            Hookline turns off an endpoint after it fails every attempt for seven days.
+
+        - title: Duplicates and ordering
+
+          body: |
+            Delivery is at least once. The same event can arrive twice because Hookline lost a `2xx` response on the way back and retried. Store `id` from the envelope and ignore an event you have already processed.
+
+            Order is not guaranteed. A retried event can arrive after one that followed it. Compare the `created` timestamp before acting on sequence, or fetch current state.
+
+  - name: Account
+    description: |
+      The account object reports the API version your requests use by default.
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: hl_live_...
+
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Records per page.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+
+    StartingAfter:
+      name: starting_after
+      in: query
+      required: false
+      description: Cursor from the previous page.
+      schema:
+        type: string
+
+    EventId:
+      name: id
+      in: path
+      required: true
+      description: The event ID, such as `evt_8f2a91`.
+      schema:
+        type: string
+        example: evt_8f2a91
+
+    EndpointId:
+      name: id
+      in: path
+      required: true
+      description: The endpoint ID, such as `ep_2201`.
+      schema:
+        type: string
+        example: ep_2201
+
+    DeliveryId:
+      name: id
+      in: path
+      required: true
+      description: The delivery ID, such as `dlv_44c1`.
+      schema:
+        type: string
+        example: dlv_44c1
+
+  schemas:
+    Event:
+      type: object
+      required: [id, type, created, data]
+      properties:
+        id:
+          type: string
+          description: Stable across every delivery and retry of this event.
+          example: evt_8f2a91
+        type:
+          type: string
+          description: The event type, in `resource.action` form.
+          example: invoice.paid
+        created:
+          type: string
+          format: date-time
+          description: When Hookline created the event, in UTC.
+          example: "2026-03-04T10:12:44Z"
+        status:
+          type: string
+          enum: [queued, delivered, failed]
+          description: Current delivery state of the event.
+          example: queued
+        data:
+          type: object
+          additionalProperties: true
+          description: Payload fields for this event type. The fields below show the `invoice.paid` shape. Other types carry different fields, listed on [Event types](../about/event-types.md).
+          properties:
+            invoiceId:
+              type: string
+              description: The invoice this event refers to.
+              example: inv_1042
+            amount:
+              type: integer
+              description: Amount in the smallest currency unit.
+              example: 4900
+            currency:
+              type: string
+              description: ISO 4217 currency code.
+              example: USD
+          example:
+            invoiceId: inv_1042
+            amount: 4900
+            currency: USD
+
+    Endpoint:
+      type: object
+      required: [id, url, event_types, enabled]
+      properties:
+        id:
+          type: string
+          description: Unique ID for this endpoint.
+          example: ep_2201
+        url:
+          type: string
+          format: uri
+          description: HTTPS URL that receives deliveries.
+          example: https://example.com/webhooks
+        event_types:
+          type: array
+          description: Types this endpoint receives. A wildcard such as `invoice.*` matches one prefix.
+          items:
+            type: string
+          example: [invoice.paid, invoice.failed]
+        description:
+          type: string
+          description: Label shown in the dashboard.
+          example: Billing service
+        enabled:
+          type: boolean
+          description: Whether Hookline delivers to this endpoint.
+          example: true
+        created:
+          type: string
+          format: date-time
+          description: When Hookline created the endpoint, in UTC.
+          example: "2026-03-04T10:12:44Z"
+
+    EndpointWithSecret:
+      allOf:
+        - $ref: "#/components/schemas/Endpoint"
+        - type: object
+          required: [secret]
+          properties:
+            secret:
+              type: string
+              description: Signing secret. Returned once and never again.
+              example: whsec_9f2c
+
+    Delivery:
+      type: object
+      required: [id, event_id, endpoint_id, status, attempt, created]
+      properties:
+        id:
+          type: string
+          description: Unique ID for this delivery, not the event.
+          example: dlv_44c1
+        event_id:
+          type: string
+          description: The event this delivery carries.
+          example: evt_8f2a91
+        endpoint_id:
+          type: string
+          description: The endpoint Hookline sent to.
+          example: ep_2201
+        status:
+          type: string
+          enum: [succeeded, failed, pending]
+          description: Current state of the delivery.
+          example: failed
+        attempt:
+          type: integer
+          description: Attempt number, starting at 1.
+          example: 5
+        response_status:
+          type: integer
+          nullable: true
+          description: Status code your endpoint returned. Null when no response arrived.
+          example: 504
+        error:
+          type: string
+          nullable: true
+          description: Set when Hookline never got a response. Values include `timeout`, `dns_error`, `tls_error`, and `connection_refused`.
+          example: timeout
+        created:
+          type: string
+          format: date-time
+          description: When the attempt started, in UTC.
+          example: "2026-03-04T10:12:44Z"
+        next_retry:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the next attempt is due. Null after Hookline finishes the delivery.
+
+    Account:
+      type: object
+      required: [id, api_version]
+      properties:
+        id:
+          type: string
+          description: Unique ID for the account.
+          example: acct_9930
+        api_version:
+          type: string
+          description: Dated API version used when a request omits the `Hookline-Version` header.
+          example: "2026-03-01"
+
+    List:
+      type: object
+      required: [data, has_more]
+      properties:
+        data:
+          type: array
+          description: The results for this page.
+          items: {}
+        has_more:
+          type: boolean
+          description: Whether another page is available.
+          example: true
+        next_cursor:
+          type: string
+          nullable: true
+          description: Value to pass as `starting_after` for the next page. Null on the last page.
+          example: cur_19af
+
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          description: The error container.
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code.
+              example: invalid_api_key
+            message:
+              type: string
+              description: Human-readable explanation.
+              example: The API key is missing or invalid.
+            request_id:
+              type: string
+              description: Include this when you contact support.
+              example: req_5b1c
+
+    CreateEventRequest:
+      type: object
+      required: [type, payload]
+      properties:
+        type:
+          type: string
+          description: Event type to send.
+          example: invoice.paid
+        payload:
+          type: object
+          additionalProperties: true
+          description: JSON body that receivers get.
+          example:
+            invoiceId: inv_1042
+        idempotency_key:
+          type: string
+          description: Prevents a duplicate event when you retry the same request. Keys expire after 24 hours.
+
+    CreateEndpointRequest:
+      type: object
+      required: [url, event_types]
+      properties:
+        url:
+          type: string
+          format: uri
+          description: HTTPS URL that receives deliveries.
+          example: https://example.com/webhooks
+        event_types:
+          type: array
+          description: Types to deliver, or a wildcard such as `invoice.*`.
+          items:
+            type: string
+          example: [invoice.paid, invoice.failed]
+        description:
+          type: string
+          description: Label shown in the dashboard.
+        enabled:
+          type: boolean
+          description: Whether to start delivering immediately. Defaults to `true`.
+
+    UpdateEndpointRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: New HTTPS URL that receives deliveries.
+        event_types:
+          type: array
+          description: Replaces the current list rather than adding to it.
+          items:
+            type: string
+          example: [invoice.paid]
+        description:
+          type: string
+          description: New label shown in the dashboard.
+        enabled:
+          type: boolean
+          description: Whether Hookline delivers to this endpoint.
+
+    ReplayRangeRequest:
+      type: object
+      required: [endpoint_id, created_after]
+      properties:
+        endpoint_id:
+          type: string
+          description: The endpoint to resend to.
+          example: ep_2201
+        created_after:
+          type: string
+          format: date-time
+          description: Start of the window.
+          example: "2026-03-01T00:00:00Z"
+        created_before:
+          type: string
+          format: date-time
+          description: End of the window.
+        status:
+          type: string
+          enum: [succeeded, failed, pending]
+          description: Only replay deliveries with this status.
+
+  responses:
+    Unauthorized:
+      description: The API key is missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error:
+              code: invalid_api_key
+              message: The API key is missing or invalid.
+              request_id: req_5b1c
+
+    NotFound:
+      description: The resource does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error:
+              code: not_found
+              message: The resource does not exist.
+              request_id: req_5b1c
+
+    RateLimited:
+      description: This window hit the rate limit. Retry after the delay in `Retry-After`.
+      headers:
+        Retry-After:
+          description: Seconds to wait before retrying.
+          schema:
+            type: integer
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error:
+              code: rate_limited
+              message: Too many requests. Retry after 30 seconds.
+              request_id: req_7d2e
+
+    BadRequest:
+      description: The request body is malformed or a required field is missing.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error:
+              code: malformed_request
+              message: The request body is not valid JSON.
+              request_id: req_3a91
+
+    Forbidden:
+      description: The API key does not have access to this resource.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error:
+              code: forbidden
+              message: This key cannot access the requested account.
+              request_id: req_4c02
+
+    Conflict:
+      description: The idempotency key was reused with a different request body.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error:
+              code: idempotency_conflict
+              message: This idempotency key was used with a different body.
+              request_id: req_5d18
+
+    PayloadTooLarge:
+      description: The request body exceeds the 256 KB limit.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error:
+              code: payload_too_large
+              message: The payload exceeds 256 KB.
+              request_id: req_6e27
+
+    Unprocessable:
+      description: One or more fields failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error:
+              code: validation_failed
+              message: "payload.amount must be an integer."
+              request_id: req_7f35
+
+    ServerError:
+      description: Hookline could not complete the request.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error:
+              code: internal_error
+              message: An unexpected error occurred.
+              request_id: req_8a44
+
+    ServiceUnavailable:
+      description: The service is temporarily unavailable.
+      headers:
+        Retry-After:
+          description: Seconds to wait before retrying.
+          schema:
+            type: integer
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error:
+              code: service_unavailable
+              message: The service is unavailable. Try again shortly.
+              request_id: req_9b53
+
+paths:
+  /events:
+    post:
+      tags: [Events]
+      operationId: createEvent
+      summary: Create an event
+      description: |
+        Queues an event and delivers it to every endpoint subscribed to its type.
+      x-code-samples:
+        - lang: Node.js
+          source: |
+            const event = await hookline.events.create({
+              type: 'invoice.paid',
+              payload: { invoiceId: 'inv_1042' },
+            });
+        - lang: Python
+          source: |
+            event = hookline.events.create(
+                type="invoice.paid",
+                payload={"invoiceId": "inv_1042"},
+            )
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEventRequest"
+      responses:
+        "202":
+          description: Event accepted and queued.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+              example:
+                id: evt_8f2a91
+                type: invoice.paid
+                created: "2026-03-04T10:12:44Z"
+                status: queued
+                data:
+                  invoiceId: inv_1042
+                  amount: 4900
+                  currency: USD
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+
+  /events/{id}:
+    get:
+      tags: [Events]
+      operationId: retrieveEvent
+      summary: Retrieve an event
+      description: |
+        Returns the event with the same fields it delivered, plus its current `status`. Use it when a receiver needs the full record after a replay.
+      x-code-samples:
+        - lang: Node.js
+          source: |
+            const event = await hookline.events.retrieve('evt_8f2a91');
+        - lang: Python
+          source: |
+            event = hookline.events.retrieve("evt_8f2a91")
+      parameters:
+        - $ref: "#/components/parameters/EventId"
+      responses:
+        "200":
+          description: The event.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+
+  /endpoints:
+    get:
+      tags: [Endpoints]
+      operationId: listEndpoints
+      summary: List endpoints
+      description: Returns every endpoint on the account, newest first. Hookline omits the `secret` field.
+      x-code-samples:
+        - lang: Node.js
+          source: |
+            const page = await hookline.endpoints.list({ limit: 20 });
+        - lang: Python
+          source: |
+            page = hookline.endpoints.list(limit=20)
+      parameters:
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/StartingAfter"
+      responses:
+        "200":
+          description: A page of endpoints.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/List"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Endpoint"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+
+    post:
+      tags: [Endpoints]
+      operationId: createEndpoint
+      summary: Create an endpoint
+      description: |
+        Registers a URL to receive events. The response includes `secret` once. Store it before you close the connection.
+      x-code-samples:
+        - lang: Node.js
+          source: |
+            const endpoint = await hookline.endpoints.create({
+              url: 'https://example.com/webhooks',
+              eventTypes: ['invoice.paid'],
+            });
+        - lang: Python
+          source: |
+            endpoint = hookline.endpoints.create(
+                url="https://example.com/webhooks",
+                event_types=["invoice.paid"],
+            )
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEndpointRequest"
+      responses:
+        "201":
+          description: Endpoint created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EndpointWithSecret"
+              example:
+                id: ep_2201
+                url: https://example.com/webhooks
+                event_types: [invoice.paid, invoice.failed]
+                secret: whsec_9f2c
+                enabled: true
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+
+  /endpoints/{id}:
+    patch:
+      tags: [Endpoints]
+      operationId: updateEndpoint
+      summary: Update an endpoint
+      description: |
+        Changes the fields you send and leaves the rest alone. Changing `event_types` replaces the list rather than adding to it.
+      x-code-samples:
+        - lang: Node.js
+          source: |
+            await hookline.endpoints.update('ep_2201', {
+              eventTypes: ['invoice.paid', 'invoice.failed'],
+            });
+        - lang: Python
+          source: |
+            hookline.endpoints.update(
+                "ep_2201",
+                event_types=["invoice.paid", "invoice.failed"],
+            )
+      parameters:
+        - $ref: "#/components/parameters/EndpointId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateEndpointRequest"
+      responses:
+        "200":
+          description: The updated endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Endpoint"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+
+    delete:
+      tags: [Endpoints]
+      operationId: deleteEndpoint
+      summary: Delete an endpoint
+      description: |
+        Stops delivery immediately. Hookline cancels pending retries and records them as `failed`.
+      x-code-samples:
+        - lang: Node.js
+          source: |
+            await hookline.endpoints.delete('ep_2201');
+        - lang: Python
+          source: |
+            hookline.endpoints.delete("ep_2201")
+      parameters:
+        - $ref: "#/components/parameters/EndpointId"
+      responses:
+        "204":
+          description: Endpoint deleted.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+
+  /deliveries:
+    get:
+      tags: [Deliveries]
+      operationId: listDeliveries
+      summary: List deliveries
+      description: |
+        Returns delivery attempts, newest first. Records are readable for thirty days.
+      x-code-samples:
+        - lang: Node.js
+          source: |
+            const page = await hookline.deliveries.list({ status: 'failed', limit: 20 });
+        - lang: Python
+          source: |
+            page = hookline.deliveries.list(status="failed", limit=20)
+      parameters:
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/StartingAfter"
+        - name: endpoint_id
+          in: query
+          required: false
+          description: Only attempts for one endpoint.
+          schema:
+            type: string
+        - name: event_type
+          in: query
+          required: false
+          description: Only attempts for one event type.
+          schema:
+            type: string
+        - name: status
+          in: query
+          required: false
+          description: Only attempts with this status.
+          schema:
+            type: string
+            enum: [succeeded, failed, pending]
+        - name: created_after
+          in: query
+          required: false
+          description: Start of the window, as an ISO 8601 timestamp.
+          schema:
+            type: string
+            format: date-time
+        - name: created_before
+          in: query
+          required: false
+          description: End of the window, as an ISO 8601 timestamp.
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: A page of deliveries.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/List"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Delivery"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+
+  /deliveries/{id}:
+    get:
+      tags: [Deliveries]
+      operationId: retrieveDelivery
+      summary: Retrieve a delivery
+      description: |
+        Returns one delivery, including the request body Hookline sent. It is the fastest way to compare what you expected with what arrived.
+      x-code-samples:
+        - lang: Node.js
+          source: |
+            const delivery = await hookline.deliveries.retrieve('dlv_44c1');
+        - lang: Python
+          source: |
+            delivery = hookline.deliveries.retrieve("dlv_44c1")
+      parameters:
+        - $ref: "#/components/parameters/DeliveryId"
+      responses:
+        "200":
+          description: The delivery.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Delivery"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+
+  /deliveries/{id}/replay:
+    post:
+      tags: [Deliveries]
+      operationId: replayDelivery
+      summary: Replay a delivery
+      description: |
+        Sends an existing event to an endpoint again. The event `id` and `data` stay the same, so the receiver can deduplicate. The original delivery stays in the log with its history intact.
+      x-code-samples:
+        - lang: Node.js
+          source: |
+            const delivery = await hookline.deliveries.replay('dlv_44c1');
+        - lang: Python
+          source: |
+            delivery = hookline.deliveries.replay("dlv_44c1")
+      parameters:
+        - $ref: "#/components/parameters/DeliveryId"
+      responses:
+        "202":
+          description: A new delivery record.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Delivery"
+              example:
+                id: dlv_77b0
+                event_id: evt_8f2a91
+                endpoint_id: ep_2201
+                status: pending
+                attempt: 1
+                created: "2026-03-04T10:20:00Z"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+
+  /deliveries/replay:
+    post:
+      tags: [Deliveries]
+      operationId: replayRange
+      summary: Replay a range
+      description: |
+        Queues every delivery in a window for one endpoint. A window of ten thousand events runs for several minutes, so poll the delivery log rather than waiting on the request.
+
+        A replay does not refresh the payload. The receiver sees the data from the moment Hookline created the event.
+      x-code-samples:
+        - lang: Node.js
+          source: |
+            const result = await hookline.deliveries.replayRange({
+              endpointId: 'ep_2201',
+              createdAfter: '2026-03-01T00:00:00Z',
+            });
+        - lang: Python
+          source: |
+            result = hookline.deliveries.replay_range(
+                endpoint_id="ep_2201",
+                created_after="2026-03-01T00:00:00Z",
+            )
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReplayRangeRequest"
+      responses:
+        "202":
+          description: Hookline queued the window.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  queued:
+                    type: integer
+                    description: Deliveries added to the queue.
+                    example: 1284
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+
+  /account:
+    get:
+      tags: [Account]
+      operationId: retrieveAccount
+      summary: Retrieve the account
+      description: |
+        Returns the account and the API version it uses by default. If `api_version` differs from the version your code expects, send the `Hookline-Version` header explicitly.
+      x-code-samples:
+        - lang: Node.js
+          source: |
+            const account = await hookline.account.retrieve();
+        - lang: Python
+          source: |
+            account = hookline.account.retrieve()
+      responses:
+        "200":
+          description: The account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+              example:
+                id: acct_9930
+                api_version: "2026-03-01"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "429":
+          $ref: "#/components/responses/RateLimited"

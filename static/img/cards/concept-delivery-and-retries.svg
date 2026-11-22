@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4F46E5"/>
+      <stop offset="1" stop-color="#1E1B4B"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="22%" cy="20%" r="80%">
+      <stop offset="0" stop-color="#C7D2FE" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#C7D2FE" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#1E1B4B" flood-opacity=".32"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)"/>
+  <rect width="640" height="360" fill="url(#glow)"/>
+  <circle cx="100" cy="300" r="120" fill="#A5B4FC" opacity=".2"/>
+  <circle cx="560" cy="56" r="140" fill="#818CF8" opacity=".25"/>
+
+  <g filter="url(#shadow)">
+    <rect x="108" y="76" width="424" height="208" rx="16" fill="#0F172A" stroke="#334155" stroke-width="2"/>
+    <path d="M108 112h424" stroke="#1E293B" stroke-width="2"/>
+    <circle cx="130" cy="94" r="5" fill="#F87171"/>
+    <circle cx="146" cy="94" r="5" fill="#FBBF24"/>
+    <circle cx="162" cy="94" r="5" fill="#34D399"/>
+
+    <rect x="126" y="134" width="60" height="26" rx="13" fill="#064E3B"/>
+    <text x="156" y="151" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#6EE7B7" text-anchor="middle">200</text>
+    <rect x="206" y="141" width="150" height="10" rx="5" fill="#475569"/>
+    <rect x="206" y="159" width="92" height="8" rx="4" fill="#334155"/>
+
+    <rect x="126" y="188" width="64" height="26" rx="13" fill="#7F1D1D"/>
+    <text x="158" y="205" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#FCA5A5" text-anchor="middle">500</text>
+    <rect x="206" y="195" width="132" height="10" rx="5" fill="#475569"/>
+    <rect x="206" y="213" width="88" height="8" rx="4" fill="#334155"/>
+
+    <circle cx="488" cy="116" r="32" fill="#FFFFFF"/>
+    <path d="M474 116a14 14 0 1 0 4-10" fill="none" stroke="#0F766E" stroke-width="5" stroke-linecap="round"/>
+    <path d="M478 98v9h9" fill="none" stroke="#0F766E" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <path d="M448 220h82" stroke="#A5B4FC" stroke-width="6" stroke-linecap="round"/>
+    <path d="M468 204l-20 16 20 16" fill="none" stroke="#A5B4FC" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

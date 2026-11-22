@@ -41,6 +41,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check:frontmatter
+      - run: npm run check:api
 
   build:
     name: build
@@ -56,3 +57,21 @@ jobs:
       # Fails on broken internal links. The postbuild hook then writes the .md files and llms files.
       - run: npm run build
       - run: npm run validate
+
+  code-examples:
+    name: code-examples
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Check out the product
+        run: git clone --depth 1 https://github.com/manueldezman/hookline.git product-repo
+      - name: Install the product
+        working-directory: product-repo
+        run: npm ci
+      - name: Run the docs code examples
+        env:
+          DOCS_REPO: ${{ github.workspace }}
+        run: node product-repo/scripts/check-docs-code-examples.mjs

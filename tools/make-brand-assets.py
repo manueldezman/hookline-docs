@@ -95,7 +95,7 @@ diagram = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 250" widt
 <rect x="654" y="164" width="190" height="52" rx="10" fill="#FFFFFF" stroke="#6366F1" stroke-width="2"/>
 <text x="749" y="196" font-size="16" font-weight="600" fill="#0F172A">Endpoint C</text>
 
-<text x="285" y="104" font-size="13" fill="#475569" font-family="{F}">POST /v1/events</text>
+<text x="285" y="104" font-size="13" fill="#475569" font-family="{F}">POST /v2/events</text>
 <text x="594" y="104" font-size="13" fill="#475569" font-family="{F}">signed webhook</text>
 </g>
 <g stroke="#64748B" stroke-width="2" fill="none" marker-end="url(#a)">

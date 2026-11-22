@@ -1,0 +1,20 @@
+# Netlify is preview-only. Production deploys from main to GitHub Pages via
+# .github/workflows/deploy.yml, so every build context except a pull request
+# deploy preview is skipped here.
+
+[build]
+  command = "npm run build"
+  publish = "build"
+  # The ignore command exits 0 to skip a build. Only deploy previews proceed.
+  ignore = "test \"$CONTEXT\" != \"deploy-preview\""
+
+[build.environment]
+  NODE_VERSION = "22"
+  # Netlify serves the site from the domain root. GitHub Pages uses the
+  # repo subpath instead, which stays the default when this is unset.
+  SITE_BASE_URL = "/"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
