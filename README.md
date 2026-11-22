@@ -15,8 +15,9 @@ Every content change passes through automated gates before it reaches the publis
 | Spelling | codespell | Pull request | Any known misspelling blocks the merge |
 | Front matter | `check-frontmatter.js` (Node) | Pull request | Missing or malformed metadata blocks the merge |
 | Internal links and build | Docusaurus | Pull request and deploy | Any broken internal link blocks the merge and the deploy |
+| Code examples | `check-docs-code-examples.mjs` (Node) | Pull request | Any curl or CLI example that does not match the product blocks the merge |
 | Agent-file parity | `validate-agent-files.js` and Node tests | Pull request and deploy | Any missing or broken agent file blocks the merge and the deploy |
-| External links | Lychee | Push to `main` and weekly | Any dead URL fails the run. It doesn't block merges |
+| External links | Lychee | Pull request and push to `main` | Any dead URL blocks the merge |
 
 ## What each tool catches
 
@@ -56,7 +57,7 @@ I set `onBrokenLinks`, `onBrokenAnchors`, and `markdown.hooks.onBrokenMarkdownLi
 
 ### Lychee: external links checker
 
-Internal links only change when someone edits the docs. External links can break with no change to the repo. So Lychee runs on every push to `main` and every Monday at 06:00 UTC. The scheduled run is the useful one, because it finds link rot when nobody has touched the repository.
+Internal links only change when someone edits the docs. External links can break with no change to the repo. So Lychee runs on every pull request and every push to `main`. A dead link blocks the merge.
 
 Lychee scans the built HTML, so it also sees links generated inside components. [`lychee.toml`](lychee.toml) does four things: resolves root-relative links against the site origin, accepts any 2xx status plus `429` (rate limited) so busy sites don't cause false failures, retries flaky links three times, and excludes localhost, example domains, the not-yet-deployed site itself, and the fictional API host.
 
@@ -70,8 +71,8 @@ Three workflows wire the tools together.
 
 | Workflow | Trigger | What it runs |
 | --- | --- | --- |
-| [`docs-checks.yml`](.github/workflows/docs-checks.yml) | Pull request | Four parallel jobs: `prose` (Vale), `spelling` (codespell), `frontmatter`, and `build` (tests, Docusaurus build, agent-file validation) |
-| [`links.yml`](.github/workflows/links.yml) | Push to `main`, weekly cron, manual | Builds the site, then runs Lychee |
+| [`docs-checks.yml`](.github/workflows/docs-checks.yml) | Pull request | Five parallel jobs: `prose` (Vale), `spelling` (codespell), `frontmatter`, `build` (tests, Docusaurus build, agent-file validation), and `code-examples` |
+| [`links.yml`](.github/workflows/links.yml) | Pull request, push to `main`, manual | Builds the site, then runs Lychee |
 | [`deploy.yml`](.github/workflows/deploy.yml) | Push to `main`, manual | Builds, validates the agent files, then publishes to GitHub Pages |
 
 ### Deploy previews
@@ -82,7 +83,7 @@ Netlify builds pull requests only. Every PR gets its own preview URL, and produc
 
 ### How a gate works
 
-A lint only blocks a merge when the repository requires it. `main` is protected: a pull request can't merge until `prose`, `spelling`, `frontmatter`, and `build` have all passed. The four jobs are independent and run in parallel, so one failure doesn't hide the others. A contributor sees every problem in one round instead of fixing them one at a time.
+A lint only blocks a merge when the repository requires it. `main` is protected: a pull request can't merge until `prose`, `spelling`, `frontmatter`, `build`, `code-examples`, and `lychee` have all passed. The five jobs in `docs-checks.yml` are independent and run in parallel, so one failure doesn't hide the others. A contributor sees every problem in one round instead of fixing them one at a time.
 
 ### Design choices
 
@@ -91,16 +92,16 @@ A lint only blocks a merge when the repository requires it. `main` is protected:
 
 ### A check doing its job
 
-[Pull request #2](https://github.com/manueldezman/hookline-docs/pull/2) is a deliberately broken change. It exists to show the required checks blocking a merge.
+[Pull request #2](https://github.com/manueldezman/hookline-docs/pull/2) is a deliberately broken change. It exists to show the required checks blocking a merge. The `build` and `code-examples` checks pass.
 
-![Pull request showing build, prose, spelling and frontmatter checks failure](./assets/r-2-failed-checks.png)
+![Pull request #2 showing an earlier run of the checks](./assets/r-2-failed-checks.png)
 
 | Mistake in the pull request | Check that caught it |
 | --- | --- |
-| Writes 'hookline' instead of 'Hookline' | `prose` (Vale.Terms) |
+| Writes 'web hook' instead of 'webhook' | `prose` (Hookline.Webhook) |
 | Misspells 'service' | `spelling` (codespell) |
-| Omits the `description` in `docs/intro.md` | `frontmatter` |
-| Links to a missing page, `./sending-events-typo.md` | `build` |
+| Omits the `description` in `docs/index.md` | `frontmatter` |
+| Links to `https://httpbin.org/status/404` | `lychee` |
 
 ## Agent-facing documentation
 
@@ -110,7 +111,7 @@ AI agents and search tools increasingly read documentation as Markdown rather th
 
 | Output | URL | Purpose |
 | --- | --- | --- |
-| A Markdown twin of every page | Add `.md` to any page URL, for example `/docs/quick-start.md` | The page as Markdown, with components resolved |
+| A Markdown twin of every page | Add `.md` to any page URL, for example `/docs/getting-started/quick-start.md` | The page as Markdown, with components resolved |
 | `llms.txt` | `/llms.txt` | An index of every page with its description, following the llmstxt.org layout |
 | `llms-full.txt` | `/llms-full.txt` | Every page in one file |
 | `sitemap.xml` and `robots.txt` | `/sitemap.xml`, `/robots.txt` | Standard crawler discovery |
@@ -173,7 +174,7 @@ The docs split into four areas. Getting started, Guides, API reference and SDK e
 
 ### Information architecture decisions I made
 
-- **Audience first framing.** The "Who is Hookline for?" section names four readers: Backend developers, Platform engineers, Operations engineers and security teams.
+- **Audience first framing.** The "Who is Hookline for?" section names four readers: Backend developers, Platform teams, Operations engineers and security teams.
 - **3 max levels of depth.** Reference > Events > Create an event is the deepest path on the site. Getting started and Guides stop at two.
 - **Navigation organized by the user's job.** The API has an events resource, and there is no Events entry in the header. Sending an event belongs to the Quickstart, verifying its signature belongs to Guides, and the endpoint itself belongs to Reference.
 
