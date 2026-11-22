@@ -15,7 +15,7 @@ Hookline is a web hook delivery sevice. It takes the events your product generat
 
 Use Hookline when you need dependable webhooks without building your own queue, retry schedule, signing, and delivery tracking.
 
-Read the [event types reference](./api/about/event-types-typo.md) for the full list.
+Read the [event types reference](./api/about/event-types.md) for the full list. See the [status page](https://httpbin.org/status/404) for live updates.
 
 ## Who is Hookline for?
 
