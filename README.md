@@ -72,7 +72,7 @@ Three workflows wire the tools together.
 | Workflow | Trigger | What it runs |
 | --- | --- | --- |
 | [`docs-checks.yml`](.github/workflows/docs-checks.yml) | Pull request | Five parallel jobs: `prose` (Vale), `spelling` (codespell), `frontmatter`, `build` (tests, Docusaurus build, agent-file validation), and `code-examples` |
-| [`links.yml`](.github/workflows/links.yml) | Pull request, push to `main`, manual | Builds the site, then runs Lychee |
+| [`links.yml`](.github/workflows/links.yml) | Pull request, manual | Builds the site, then runs Lychee |
 | [`deploy.yml`](.github/workflows/deploy.yml) | Push to `main`, manual | Builds, validates the agent files, then publishes to GitHub Pages |
 
 ### Deploy previews
