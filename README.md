@@ -85,6 +85,14 @@ Netlify builds pull requests only. Every PR gets its own preview URL, and produc
 
 A lint only blocks a merge when the repository requires it. `main` is protected: a pull request can't merge until `prose`, `spelling`, `frontmatter`, `build`, `code-examples`, and `lychee` have all passed. The five jobs in `docs-checks.yml` are independent and run in parallel, so one failure doesn't hide the others. A contributor sees every problem in one round instead of fixing them one at a time.
 
+### Automatic documentation updates
+
+Product changes can make docs wrong. The product repository drafts docs pull requests automatically.
+
+When a pull request is opened in `manueldezman/hookline`, the `docs-impact` workflow builds the product, reads the diff, and finds the docs pages that depend on the changed files. The workflow opens a pull request in this repository with those pages updated. The agent changes only what the product diff makes wrong.
+
+The draft pull request uses the same PR template as hand written docs pull requests. It lists the pages it changed and links back to the product pull request. The draft is blocked by the same `CI Gates` ruleset. A contributor can review the changes, add context, and merge when they pass.
+
 ### Design choices
 
 - **Deploy validates first.** `deploy.yml` runs the agent-file validator before it publishes, so a broken `llms.txt` can't go live.
